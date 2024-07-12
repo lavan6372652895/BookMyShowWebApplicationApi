@@ -3,15 +3,15 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.10.34928.147
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BookMyShowWebApplication", "BookMyShowWebApplication\BookMyShowWebApplication.csproj", "{D97CA369-E8E7-4794-8F37-08217776EDFD}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BookMyShowWebApplication", "BookMyShowWebApplication\BookMyShowWebApplication.csproj", "{D97CA369-E8E7-4794-8F37-08217776EDFD}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BookMyShowWebApplicationModal", "BookMyShowWebApplicationModal\BookMyShowWebApplicationModal.csproj", "{2DFCB0E3-7165-449A-ACD8-EF4255606D0C}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BookMyShowWebApplicationModal", "BookMyShowWebApplicationModal\BookMyShowWebApplicationModal.csproj", "{2DFCB0E3-7165-449A-ACD8-EF4255606D0C}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BookMyShowWebApplicationDataAccess", "BookMyShowWebApplicationDataAccess\BookMyShowWebApplicationDataAccess.csproj", "{C19A395F-4BC0-462D-A7BD-4A691F5F028E}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BookMyShowWebApplicationDataAccess", "BookMyShowWebApplicationDataAccess\BookMyShowWebApplicationDataAccess.csproj", "{C19A395F-4BC0-462D-A7BD-4A691F5F028E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BookMyShowWebApplicationCommon", "BookMyShowWebApplicationCommon\BookMyShowWebApplicationCommon.csproj", "{B81F131A-C29B-4D24-B324-89599B3E4FCA}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BookMyShowWebApplicationCommon", "BookMyShowWebApplicationCommon\BookMyShowWebApplicationCommon.csproj", "{B81F131A-C29B-4D24-B324-89599B3E4FCA}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BookMyShowWebApplicationServices", "BookMyShowWebApplicationServices\BookMyShowWebApplicationServices.csproj", "{7A570F2D-6872-45B8-A9CA-9792A8050F08}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BookMyShowWebApplicationServices", "BookMyShowWebApplicationServices\BookMyShowWebApplicationServices.csproj", "{7A570F2D-6872-45B8-A9CA-9792A8050F08}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
