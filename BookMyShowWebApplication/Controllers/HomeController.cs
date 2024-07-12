@@ -77,6 +77,11 @@ namespace BookMyShowWebApplication.Controllers
 
             return new JwtSecurityTokenHandler().WriteToken(token);
         }
-
+        [HttpGet]
+        public Task<List<Citydto>> GetCitys()
+        {
+            var data =_serivices.GetCitys();
+            return data;
+        }
     }
 }

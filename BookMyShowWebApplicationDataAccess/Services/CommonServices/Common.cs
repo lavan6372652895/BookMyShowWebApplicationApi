@@ -24,13 +24,19 @@ namespace BookMyShowWebApplicationDataAccess.Services.CommonServices
 
         public async Task<List<ActorDto>> GetActors()
         {
-            var data = await QueryAsync<ActorDto>(Storeprocedure.common.ListofActors,commandType:CommandType.StoredProcedure).ConfigureAwait(false);
+            var data = await QueryAsync<ActorDto>(Storeprocedure.Common.ListofActors,commandType:CommandType.StoredProcedure).ConfigureAwait(false);
+            return data.ToList();
+        }
+
+        public async Task<List<Citydto>> GetCitys()
+        {
+            var data = await QueryAsync < Citydto >(Storeprocedure.Common.Listofcities,commandType:CommandType.StoredProcedure).ConfigureAwait(false);
             return data.ToList();
         }
 
         public async Task<List<RoleDto>> GetRoles()
         {
-            var data = await QueryAsync<RoleDto>(Storeprocedure.common.ListofRoles,commandType:CommandType.StoredProcedure).ConfigureAwait(false); 
+            var data = await QueryAsync<RoleDto>(Storeprocedure.Common.ListofRoles,commandType:CommandType.StoredProcedure).ConfigureAwait(false); 
             return data.ToList();  
         }
     }

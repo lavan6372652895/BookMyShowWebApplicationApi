@@ -28,6 +28,12 @@ namespace BookMyShowWebApplicationServices.Services.Home
             return data;
         }
 
+        public Task<List<Citydto>> GetCitys()
+        {
+           var data =_common.GetCitys();
+            return data;
+        }
+
         public  Task<List<RoleDto>> GetRoles()
         {
             var data = _common.GetRoles();

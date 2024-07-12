@@ -12,5 +12,6 @@ namespace BookMyShowWebApplicationDataAccess.InterFaces.CommonRepo
     {
         Task<List<RoleDto>> GetRoles();
         Task<List<ActorDto>> GetActors();
+        Task<List<Citydto>> GetCitys();
     }
 }

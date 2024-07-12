@@ -13,5 +13,6 @@ namespace BookMyShowWebApplicationServices.Interface.Admin
         Task<List<MoviesDto>> AddNewMovie(MoviesDto movie);
         Task<List<GenreDto>> GetListofGenre();
         Task<List<ActorDto>> AddNewActor(ActorDto Act);
+      
     }
 }

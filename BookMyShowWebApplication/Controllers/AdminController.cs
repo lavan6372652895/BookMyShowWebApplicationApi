@@ -28,7 +28,7 @@ namespace BookMyShowWebApplication.Controllers
                 return data.Result.ToList();
             }
             else { 
-            return data.Result.ToList();
+            return  data.Result.ToList();
             }
 
         }
