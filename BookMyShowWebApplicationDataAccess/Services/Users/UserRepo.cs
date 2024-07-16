@@ -25,14 +25,18 @@ namespace BookMyShowWebApplicationDataAccess.Services.Users
             configuration = config;
         }
 
-        public async Task<string> Addseat(Bookingsdto booking)
+        public async Task<string> Addseat(Bookingsdto[] booking)
         {
             var parametar = new DynamicParameters();
-            parametar.Add("@userid", booking.userid);
-            parametar.Add("@showid", booking.Showid);
-            parametar.Add("@Bookingid", booking.Bookingid);
-            parametar.Add("@noofseats", booking.noofseats);
-            parametar.Add("@seatno", booking.SeatNumbers);
+            parametar.Add("@userid", booking[0].userid);
+            parametar.Add("@showid",booking[0].Showid);
+            parametar.Add("@Bookingid",booking[0].Bookingid);
+            parametar.Add("@noofseats",booking[0].noofseats);
+            parametar.Add("@seatno", booking[0].SeatNumbers);
+            parametar.Add("@totalamount",booking[0].Totalamount);
+            parametar.Add("@ticketAmount",booking[0].TicketAmount);
+            parametar.Add("@GstAmount", booking[0].GstAmount);
+            parametar.Add("@platformcharges",booking[0].Platformcharges);
             var data = await QueryFirstOrDefaultAsync<string>(Storeprocedure.Users.TicketBooking, parametar ,commandType: CommandType.StoredProcedure);
             return data.ToString(); 
         }

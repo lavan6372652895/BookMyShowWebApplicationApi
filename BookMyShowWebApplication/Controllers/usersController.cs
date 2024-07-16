@@ -5,7 +5,7 @@ using BookMyShowWebApplicationServices.Interface.IHome;
 using BookMyShowWebApplicationServices.Interface.Users;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using System.Runtime.InteropServices;
+
 
 namespace BookMyShowWebApplication.Controllers
 {
@@ -61,7 +61,7 @@ namespace BookMyShowWebApplication.Controllers
         }
 
         [HttpPost]
-        public Task<string> AddBooking(Bookingsdto booking)
+        public Task<string> AddBooking(Bookingsdto[] booking)
         {
             var data = _serivices.Addseat(booking);
             return Task.FromResult(data.Result);

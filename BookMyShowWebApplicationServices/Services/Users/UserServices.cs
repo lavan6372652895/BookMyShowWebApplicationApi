@@ -18,7 +18,7 @@ namespace BookMyShowWebApplicationServices.Services.Users
             _service = service;
         }
 
-        public Task<string> Addseat(Bookingsdto booking)
+        public Task<string> Addseat(Bookingsdto[] booking)
         {
            var data = _service.Addseat(booking);
             return data;

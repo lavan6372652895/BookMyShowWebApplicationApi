@@ -16,5 +16,6 @@ namespace BookMyShowWebApplicationModal
         public int ScreenId {  get; set; } 
         public TimeSpan ShowTime {  get; set; }
         public DateTime ShowDate { get; set; }
+        public decimal Price {  get; set; }
     }
 }

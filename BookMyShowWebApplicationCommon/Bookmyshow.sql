@@ -80,7 +80,12 @@ ALTER PROCEDURE [dbo].[Sp_addBookings]
     @showid INT,
     @Bookingid INT,
     @noofseats INT,
-    @seatno NVARCHAR(250))
+    @seatno NVARCHAR(250),
+	@totalamount decimal(10,3),
+	@ticketAmount decimal(10,3),
+	@GstAmount decimal(10,3),
+	@platformcharges decimal(10,3)
+	)
 AS
 BEGIN
     BEGIN TRY
@@ -89,8 +94,9 @@ BEGIN
         IF (@Bookingid IS NULL OR @Bookingid = 0)
         BEGIN
             -- Insert into Bookings table
-            INSERT INTO Bookings (UserID, ShowtimeID, BookingDateTime,[status],numberofseats,seatnumbers)
-            VALUES (@userid, @showid, GETDATE(), 1, @noofseats, @seatno)
+            INSERT INTO Bookings (UserID, ShowtimeID, BookingDateTime,[status],numberofseats,seatnumbers,Totalamount,
+			TicketAmount,GstAmount,Platformcharges)
+            VALUES (@userid, @showid, GETDATE(), 1, @noofseats, @seatno,@totalamount,@ticketAmount,@GstAmount,@platformcharges)
 
             DECLARE @id INT 
             SET @id = SCOPE_IDENTITY()
