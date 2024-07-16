@@ -18,8 +18,6 @@ jobs:
 
       - name: Set up .NET
         uses: actions/setup-dotnet@v1
-        with:
-          dotnet-version: '6.0.x'  # Specify the .NET version you're using
 
       - name: Cache SonarQube packages
         uses: actions/cache@v2
@@ -40,12 +38,28 @@ jobs:
         if: steps.cache-sonar-scanner.outputs.cache-hit != 'true'
         shell: powershell
         run: |
-          New-Item -Path .sonar/scanner -ItemType Directory
+          Write-Output "Installing SonarQube Scanner..."
+          New-Item -Path .sonar/scanner -ItemType Directory -Force
           dotnet tool install --global dotnet-sonarscanner
+          Write-Output "SonarQube Scanner installed."
 
-      - name: Build and analyze
+      - name: Begin SonarQube analysis
         shell: powershell
         run: |
-          dotnet sonarscanner begin /k:"BookMyShowWebApplicationApi" /d:sonar.login="${{ secrets.SONAR_TOKEN }}" /d:sonar.host.url="${{ secrets.SONAR_HOST_URL }}"
+          Write-Output "Starting SonarQube analysis..."
+          dotnet sonarscanner begin /k:"BookMyShowWebApplicationApi" /d:sonar.login="${{ secrets.SONAR_TOKEN }}" /d:sonar.host.url="${{ secrets.SONAR_HOST_URL }}" /d:sonar.verbose=true
+          Write-Output "SonarQube analysis started."
+
+      - name: Build project
+        shell: powershell
+        run: |
+          Write-Output "Building the project..."
           dotnet build
+          Write-Output "Project built."
+
+      - name: End SonarQube analysis
+        shell: powershell
+        run: |
+          Write-Output "Ending SonarQube analysis..."
           dotnet sonarscanner end /d:sonar.login="${{ secrets.SONAR_TOKEN }}"
+          Write-Output "SonarQube analysis ended."
