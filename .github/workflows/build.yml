@@ -49,9 +49,17 @@ jobs:
           $env:PATH += ";$env:USERPROFILE\.dotnet\tools"
           echo "##vso[task.prependpath]$env:USERPROFILE\.dotnet\tools"
       
-      - name: Build and analyze
+      - name: Prepare SonarQube Analysis
         shell: powershell
         run: |
           dotnet sonarscanner begin /k:"lavan6372652895_BookMyShowWebApplicationApi_6e437175-a84c-432e-8364-c39568f4df5e" /d:sonar.login="${{ secrets.SONAR_TOKEN }}" /d:sonar.host.url="${{ secrets.SONAR_HOST_URL }}"
-          dotnet build
+
+      - name: Build the Project
+        shell: powershell
+        run: |
+          dotnet build --no-incremental
+
+      - name: Finalize SonarQube Analysis
+        shell: powershell
+        run: |
           dotnet sonarscanner end /d:sonar.login="${{ secrets.SONAR_TOKEN }}"
