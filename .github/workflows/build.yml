@@ -5,29 +5,26 @@ on:
     branches:
       - master
 
+
 jobs:
   build:
     name: Build and analyze
     runs-on: windows-latest
     
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
+      - uses: actions/checkout@v4
         with:
           fetch-depth: 0  # Shallow clones should be disabled for a better relevancy of analysis
-
       - name: Set up JDK 17
         uses: actions/setup-java@v1
         with:
           java-version: 17
-
       - name: Cache SonarQube packages
         uses: actions/cache@v1
         with:
           path: ~\.sonar\cache
           key: ${{ runner.os }}-sonar
           restore-keys: ${{ runner.os }}-sonar
-
       - name: Cache SonarQube scanner
         id: cache-sonar-scanner
         uses: actions/cache@v1
@@ -35,31 +32,15 @@ jobs:
           path: .\.sonar\scanner
           key: ${{ runner.os }}-sonar-scanner
           restore-keys: ${{ runner.os }}-sonar-scanner
-
       - name: Install SonarQube scanner
         if: steps.cache-sonar-scanner.outputs.cache-hit != 'true'
         shell: powershell
         run: |
-          New-Item -Path .\.sonar\scanner -ItemType Directory -Force
-          dotnet tool install --global dotnet-sonarscanner
-
-      - name: Add dotnet tools to PATH
+          New-Item -Path .\.sonar\scanner -ItemType Directory
+          dotnet tool update dotnet-sonarscanner --tool-path .\.sonar\scanner
+      - name: Build and analyze
         shell: powershell
         run: |
-          $env:PATH += ";$env:USERPROFILE\.dotnet\tools"
-          echo "##vso[task.prependpath]$env:USERPROFILE\.dotnet\tools"
-      
-      - name: Prepare SonarQube Analysis
-        shell: powershell
-        run: |
-          dotnet sonarscanner begin /k:"lavan6372652895_BookMyShowWebApplicationApi_6e437175-a84c-432e-8364-c39568f4df5e" /d:sonar.login="${{ secrets.SONAR_TOKEN }}" /d:sonar.host.url="${{ secrets.SONAR_HOST_URL }}"
-
-      - name: Build the Project
-        shell: powershell
-        run: |
-          dotnet build --no-incremental
-
-      - name: Finalize SonarQube Analysis
-        shell: powershell
-        run: |
-          dotnet sonarscanner end /d:sonar.login="${{ secrets.SONAR_TOKEN }}"
+          .\.sonar\scanner\dotnet-sonarscanner begin /k:"lavan6372652895_BookMyShowWebApplicationApi_6e437175-a84c-432e-8364-c39568f4df5e" /d:sonar.token="${{ secrets.SONAR_TOKEN }}" /d:sonar.host.url="${{ secrets.SONAR_HOST_URL }}"
+          dotnet build
+          .\.sonar\scanner\dotnet-sonarscanner end /d:sonar.token="${{ secrets.SONAR_TOKEN }}"
