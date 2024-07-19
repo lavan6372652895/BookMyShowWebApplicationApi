@@ -44,7 +44,7 @@ jobs:
           Expand-Archive sonar-scanner.zip -DestinationPath .sonar/scanner
           rm sonar-scanner.zip
 
-      - name: Build and analyze
+      - name: Build and analyze with SonarQube
         run: |
           .sonar/scanner/sonar-scanner-4.6.2.2472-windows/bin/sonar-scanner.bat \
             -Dsonar.projectKey=lavan6372652895_BookMyShowWebApplicationApi_6e437175-a84c-432e-8364-c39568f4df5e \
@@ -55,4 +55,3 @@ jobs:
 
           .sonar/scanner/sonar-scanner-4.6.2.2472-windows/bin/sonar-scanner.bat \
             -Dsonar.login=${{ secrets.SONAR_TOKEN }}
-
