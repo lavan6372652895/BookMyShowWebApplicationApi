@@ -36,7 +36,8 @@ jobs:
           key: ${{ runner.os }}-sonar-scanner
           restore-keys: ${{ runner.os }}-sonar-scanner
 
-      - name: Install SonarQube scanner
+                   - name: dotnet-sonar-scanner
+                uses: chill-viking/dotnet-sonar-scanner@v2.0.2
         if: steps.cache-sonar-scanner.outputs.cache-hit != 'true'
         run: |
           mkdir -p .sonar/scanner
