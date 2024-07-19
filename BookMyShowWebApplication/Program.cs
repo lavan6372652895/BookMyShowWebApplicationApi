@@ -19,12 +19,7 @@ RegisterServices.RegisterService(builder.Services);
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(c =>
 {
-    //c.SwaggerDoc("v1", new OpenApiInfo
-    //{
-    //    Version = "v1",
-    //    Title = "School Management",
-    //    Description = ".NET Core Web API"
-    //});
+    
     c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
     {
         Description = "JWT Authorization header using the Bearer scheme (Example: 'Bearer 12345abcdef')",
@@ -82,8 +77,8 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 app.UseCors(policy => policy.AllowAnyHeader().AllowAnyMethod().AllowAnyOrigin());
-//app.UseAuthorization();
+app.UseAuthorization();
 
 app.MapControllers();
 
-app.Run();
+await app.RunAsync();

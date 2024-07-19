@@ -3,7 +3,7 @@ using BookMyShowWebApplicationServices;
 
 namespace BookMyShowWebApplication
 {
-    public class RegisterServices
+    public static class RegisterServices
     {
         public static void RegisterService(IServiceCollection services)
         {

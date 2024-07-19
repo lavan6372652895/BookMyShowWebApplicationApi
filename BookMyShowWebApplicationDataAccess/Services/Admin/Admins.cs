@@ -46,7 +46,6 @@ namespace BookMyShowWebApplicationDataAccess.Services.Admin
             parametar.Add("@posterpic", movie.profilepic);
             parametar.Add("@Moviecast",movie.Moviecast);
             parametar.Add("@ReleaseDate",movie.ReleaseDate);
-            //parametar.Add("@Rating",movie.Rating);
             parametar.Add("@Duration",movie.Duration);
             parametar.Add("@languages",movie.Language);
             var data = await QueryFirstOrDefaultAsync<List<MoviesDto>>(Storeprocedure.Admin.NewMovieReg, parametar, commandType: CommandType.StoredProcedure).ConfigureAwait(false);

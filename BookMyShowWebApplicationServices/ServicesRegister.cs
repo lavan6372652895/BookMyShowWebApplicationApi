@@ -12,7 +12,7 @@ using System.Threading.Tasks;
 
 namespace BookMyShowWebApplicationServices
 {
-    public class ServicesRegister
+    public static class ServicesRegister
     {
         public static Dictionary<Type, Type> GetTypes()
         {

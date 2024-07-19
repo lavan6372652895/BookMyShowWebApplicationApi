@@ -10,7 +10,7 @@ namespace BookMyShowWebApplicationDataAccess.Services
 {
     public class HomeClass : BaseRepository,IHome
     {
-        public IConfiguration configuration;
+        private IConfiguration configuration;
 
         public HomeClass(IOptions<DataConfig> connectionString, IConfiguration config = null) : base(connectionString, config)
         {
@@ -22,7 +22,7 @@ namespace BookMyShowWebApplicationDataAccess.Services
             var parametar = new DynamicParameters();
             parametar.Add("@UserName", username);
             parametar.Add("@password", password);
-            var Data = await QueryFirstOrDefaultAsync<string>(Storeprocedure.LoginSp, parametar, commandType: CommandType.StoredProcedure);
+            var Data = await QueryFirstOrDefaultAsync<string>(Storeprocedure.Common.LoginSp, parametar, commandType: CommandType.StoredProcedure);
             return Data;
         }
     }

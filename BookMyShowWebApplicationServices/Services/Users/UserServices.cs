@@ -13,7 +13,7 @@ namespace BookMyShowWebApplicationServices.Services.Users
 {
     public class UserServices : IUserServices
     {
-        private IuserRepo _service;
+        private readonly IuserRepo _service;
         public UserServices(IuserRepo service) { 
             _service = service;
         }

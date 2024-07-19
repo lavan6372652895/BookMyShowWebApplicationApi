@@ -11,11 +11,11 @@ namespace BookMyShowWebApplication.Controllers
 {
     [Route("api/[controller]/[Action]")]
     [ApiController]
-    public class usersController : ControllerBase
+    public class UsersController : ControllerBase
     {
         public IConfiguration _config;
         public IUserServices _serivices;
-        public usersController(IConfiguration config, IUserServices serivices)
+        public UsersController(IConfiguration config, IUserServices serivices)
         {
             _config = config;
             _serivices = serivices;

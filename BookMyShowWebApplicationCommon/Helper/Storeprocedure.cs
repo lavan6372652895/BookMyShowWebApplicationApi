@@ -6,9 +6,9 @@ using System.Threading.Tasks;
 
 namespace BookMyShowWebApplicationCommon.Helper
 {
-    public class Storeprocedure
+    public static class Storeprocedure
     {
-        public const string LoginSp = "Sp_UserLogin";
+        
 
        
         public class Admin()
@@ -22,6 +22,7 @@ namespace BookMyShowWebApplicationCommon.Helper
             public const string ListofRoles = "Sp_listofRoles";
             public const string ListofActors = "Sp_ListOfActors";
             public const string Listofcities = "Sp_CityList";
+            public const string LoginSp = "Sp_UserLogin";
         }
         public class Users()
         {

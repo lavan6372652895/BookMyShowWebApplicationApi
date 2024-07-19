@@ -15,7 +15,7 @@ using System.Threading.Tasks;
 namespace BookMyShowWebApplicationDataAccess
 {
     
-    public class DataRegister
+    public static class DataRegister
     {
         public static Dictionary<Type, Type> GetTypes()
         {

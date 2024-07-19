@@ -19,6 +19,6 @@ namespace BookMyShowWebApplicationModal.Admin
         public string? descriptions {  get; set; }
         [Required]
         public int Roles { get; set; }
-        //public string RoleName {  get; set; }
+   
     }   
 }
