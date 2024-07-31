@@ -1,4 +1,5 @@
-﻿using System;
+﻿using BookMyShowWebApplicationModal;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -9,5 +10,6 @@ namespace BookMyShowWebApplicationDataAccess.InterFaces
     public interface IHome
     {
         Task<string>LoginUser(string username, string password);
+        Task<List<UserDto>> Adduser(UserDto user);
     }
 }

@@ -23,6 +23,7 @@ namespace BookMyShowWebApplicationCommon.Helper
             public const string ListofActors = "Sp_ListOfActors";
             public const string Listofcities = "Sp_CityList";
             public const string LoginSp = "Sp_UserLogin";
+            public const string RegistrationSp = "Sp_Registration";
         }
         public class Users()
         {

@@ -1,16 +1,14 @@
 ﻿using BookMyShowWebApplicationModal;
 using BookMyShowWebApplicationModal.Admin;
 using BookMyShowWebApplicationServices.Interface.IHome;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
-using System.Runtime.InteropServices;
 using System.Security.Claims;
 using System.Text;
-using System.IdentityModel.Tokens.Jwt;
-using Microsoft.IdentityModel.Tokens;
-using Microsoft.AspNetCore.Http.HttpResults;
+using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authorization;
+
 namespace BookMyShowWebApplication.Controllers
 {
     [Route("BookMyShow/[controller]/[Action]")]
@@ -19,10 +17,12 @@ namespace BookMyShowWebApplication.Controllers
     {
         public IConfiguration _config;
         public IHomenterface _serivices;
-        public HomeController(IConfiguration config, IHomenterface serivices)
+        private readonly IHttpContextAccessor _httpContextAccessor;
+        public HomeController(IConfiguration config, IHomenterface serivices, IHttpContextAccessor httpContextAccessor)
         {
             _config = config;
             _serivices = serivices;
+            _httpContextAccessor = httpContextAccessor;
         }
 
 
@@ -44,44 +44,80 @@ namespace BookMyShowWebApplication.Controllers
         {
             // Ensure _services.LoginUser is awaited if it is an asynchronous method
             var data = await _serivices.LoginUser(username, password);
-
-            if (data == "Authenticated")
+            if (data == "Unauthenticated")
             {
-                var token = GenerateJSONWebToken(username);
-                return Ok(new JwtTokenmodal { token = token });
+                
+                return Unauthorized(data); // Return an unauthorized response if not authenticated
             }
-
-            return Unauthorized(data); // Return an unauthorized response if not authenticated
+            var token = GenerateJSONWebToken(username,data);
+            return Ok(new JwtTokenmodal { token = token,
+                starttime = DateTime.Now,
+                endtime = DateTime.Now.AddMinutes(40)
+            }); 
         }
-
-        private string GenerateJSONWebToken(string userInfo)
+        private string GenerateJSONWebToken(string userInfo, string Role)
         {
             var securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_config["Jwt:Key"]));
             var credentials = new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha256);
 
             var claims = new[]
             {
-        new Claim(JwtRegisteredClaimNames.Name, userInfo),
-        new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
-        new Claim(JwtRegisteredClaimNames.Iat, DateTimeOffset.UtcNow.ToUnixTimeSeconds().ToString(), ClaimValueTypes.Integer64) // Issued At
-          };
-
+           new Claim(JwtRegisteredClaimNames.Name, userInfo),
+           new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
+           new Claim(JwtRegisteredClaimNames.Typ,Role),
+           new Claim(JwtRegisteredClaimNames.Iat, DateTimeOffset.UtcNow.ToUnixTimeSeconds().ToString(), ClaimValueTypes.Integer64), // Issued At
+            };
+          
             var token = new JwtSecurityToken(
                 _config["Jwt:Issuer"],
                 _config["Jwt:Issuer"],
                 claims,
-                //notBefore: DateTime.Now,
-                //expires: DateTime.Now.AddMinutes(45),
+                notBefore: DateTime.Now,
+                expires: DateTime.Now.AddMinutes(45),
                 signingCredentials: credentials
             );
-
             return new JwtSecurityTokenHandler().WriteToken(token);
         }
         [HttpGet]
-        public Task<List<Citydto>> GetCitys()
+        public async Task<List<Citydto>> GetCitys()
         {
-            var data =_serivices.GetCitys();
+            var data = await _serivices.GetCitys();
             return data;
         }
+
+        [HttpPost]
+        public async Task<IActionResult> Registration(UserDto user)
+        {
+            if (user != null)
+            {
+                var result = await _serivices.Adduser(user);
+                if (result.Count > 0) {
+                return Ok(result);
+                }
+                else
+                {
+                    return BadRequest(result);
+                }
+            }
+            return BadRequest(user);
+        }
+
+
+        [HttpGet]
+        [AllowAnonymous]
+        public async Task<IActionResult> Window()
+        {
+            var user =  _httpContextAccessor.HttpContext.User;
+            var userName = user.FindFirstValue(ClaimTypes.Name);
+            if (userName != null)
+            {
+                return Ok(userName);
+            }
+            else
+            {
+                return Unauthorized();
+            }
+        }
+
     }
 }

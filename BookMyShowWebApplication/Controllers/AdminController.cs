@@ -9,7 +9,8 @@ namespace BookMyShowWebApplication.Controllers
 {
     [Route("BookMyShow/[controller]/[Action]")]
     [ApiController]
-   
+    [Authorize]
+
     public class AdminController : ControllerBase
     {
         private IConfiguration _config;

@@ -22,6 +22,12 @@ namespace BookMyShowWebApplicationServices.Services.Home
             _common = common;
         }
 
+        public Task<List<UserDto>> Adduser(UserDto user)
+        {
+           var data =_service.Adduser(user);
+            return data;
+        }
+
         public Task<List<ActorDto>> GetActors()
         {
             var data = _common.GetActors();

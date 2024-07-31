@@ -3,14 +3,15 @@ using BookMyShowWebApplicationModal.Admin;
 using BookMyShowWebApplicationModal.Users;
 using BookMyShowWebApplicationServices.Interface.IHome;
 using BookMyShowWebApplicationServices.Interface.Users;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-
 
 namespace BookMyShowWebApplication.Controllers
 {
     [Route("api/[controller]/[Action]")]
     [ApiController]
+    [Authorize]
     public class UsersController : ControllerBase
     {
         public IConfiguration _config;
@@ -28,7 +29,6 @@ namespace BookMyShowWebApplication.Controllers
             if (data.Result.Count > 0)
             {
                 return Task.FromResult(data.Result);
-
             }
             else
             {

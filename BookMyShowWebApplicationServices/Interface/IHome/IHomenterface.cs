@@ -14,5 +14,6 @@ namespace BookMyShowWebApplicationServices.Interface.IHome
         Task<List<RoleDto>> GetRoles();
         Task<List<ActorDto>> GetActors();
         Task<List<Citydto>> GetCitys();
+        Task<List<UserDto>> Adduser(UserDto user);
     }
 }

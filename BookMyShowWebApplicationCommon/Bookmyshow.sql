@@ -1,4 +1,4 @@
-
+use LAVANBD
 -- function for return seat IDs with SeatNumbe and levels information
 ALTER FUNCTION Seatesperlevel(
     @bookingid INT
@@ -280,7 +280,7 @@ where ts.TheaterID=@theaterid
 end
 
 
-CREATE PROCEDURE Sp_UserLogin  
+alter PROCEDURE Sp_UserLogin  
     @UserName NVARCHAR(250),  
     @Password NVARCHAR(250)  
 AS  
@@ -297,15 +297,73 @@ BEGIN
         ELSE  
         BEGIN  
             -- User authenticated successfully  
-            SET @AuthResult = 'Authenticated';  
+    set  @AuthResult = (select us.Roles
+		  from Users as us
+		  where us.UserName=@UserName)
         END  
     END TRY  
     BEGIN CATCH  
         -- Error handling  
         SET @AuthResult = ERROR_MESSAGE();  
     END CATCH  
-  
     -- Return the result  
     SELECT @AuthResult AS AuthResult;  
 END
+select * from Users
+
+--create proc for Registration
+alter proc Sp_Registration(
+@fullname varchar(250),
+@username varchar(250),
+@phonenumber varchar(250),
+@password varchar(250),
+@Role varchar(250)
+)
+as
+begin
+
+insert into Users(FullName,UserName,phonenumber,passwords,IsActive,Roles)
+values(@fullname,@username,@phonenumber,@password,1,@Role)
+declare @id int
+set @id=SCOPE_IDENTITY()
+select us.* from Users as us
+where us.userid=@id
+end
+
+select * from userActivety
+
+CREATE PROCEDURE sp_userActivity
+    @token VARCHAR(250),
+    @Email VARCHAR(250),
+    @windowidentity VARCHAR(250)
+AS
+BEGIN
+    -- Variable to hold the UserID
+    DECLARE @userid INT;
+
+    -- Retrieve the UserID based on the provided email
+    SELECT @userid = UserID
+    FROM Users
+    WHERE UserName = @Email;
+
+    -- Check if UserID is found
+    IF @userid IS NULL
+    BEGIN
+        -- Handle the case where the user is not found (e.g., raise an error or log)
+        RAISERROR('User not found', 16, 1);
+        RETURN;
+    END
+
+    -- Insert the activity record into the userActivity table
+    INSERT INTO userActivity (token, userid, windowidentity)
+    VALUES (@token, @userid, @windowidentity);
+
+    -- Return the inserted record
+    SELECT * 
+    FROM userActivity
+    WHERE id = SCOPE_IDENTITY();
+END;
+
+
+
 
