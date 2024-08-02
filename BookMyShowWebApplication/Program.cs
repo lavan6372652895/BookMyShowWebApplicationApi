@@ -104,7 +104,7 @@ app.UseCors(policy => policy.AllowAnyHeader().AllowAnyMethod().AllowAnyOrigin())
 app.UseRouting();
 app.UseAuthentication();  // Add this line to ensure authentication is applied
 app.UseAuthorization();   // Ensure this is placed after UseRouting and UseAuthentication
-
+// add the Signair
 app.UseEndpoints(endpoints =>
 {
     endpoints.MapControllers();
