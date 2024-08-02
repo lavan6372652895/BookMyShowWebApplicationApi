@@ -1,4 +1,5 @@
-﻿using BookMyShowWebApplicationModal;
+﻿using BookMyShowWebApplication.Signalr;
+using BookMyShowWebApplicationModal;
 using BookMyShowWebApplicationModal.Admin;
 using BookMyShowWebApplicationModal.Users;
 using BookMyShowWebApplicationServices.Interface.IHome;
@@ -6,20 +7,23 @@ using BookMyShowWebApplicationServices.Interface.Users;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.SignalR;
 
 namespace BookMyShowWebApplication.Controllers
 {
     [Route("api/[controller]/[Action]")]
     [ApiController]
-    [Authorize]
+   // [Authorize(Roles = "user")]
     public class UsersController : ControllerBase
     {
         public IConfiguration _config;
         public IUserServices _serivices;
-        public UsersController(IConfiguration config, IUserServices serivices)
+        private readonly IHubContext<MessageHub> _hubContext;
+        public UsersController(IConfiguration config, IUserServices serivices, IHubContext<MessageHub> hubContext)
         {
             _config = config;
             _serivices = serivices;
+            _hubContext = hubContext;
         }
 
         [HttpGet]
@@ -49,7 +53,7 @@ namespace BookMyShowWebApplication.Controllers
             }
         }
         [HttpGet]
-
+        [Authorize(Roles = "Admin,user")]
         public Task<List<SeatesDto>> GetListofSeates(int Showid)
         { 
             var data =_serivices.seatesList(Showid);
@@ -61,10 +65,11 @@ namespace BookMyShowWebApplication.Controllers
         }
 
         [HttpPost]
-        public Task<string> AddBooking(Bookingsdto[] booking)
+        public  async Task<string> AddBooking(Bookingsdto[] booking)
         {
             var data = _serivices.Addseat(booking);
-            return Task.FromResult(data.Result);
+          // await _hubContext.Clients.All.UpdateSeatAvailability();
+            return data.Result;
         }
     }
 }

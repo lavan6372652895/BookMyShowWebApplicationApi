@@ -8,6 +8,7 @@ using System.Security.Claims;
 using System.Text;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
+using System.Data;
 
 namespace BookMyShowWebApplication.Controllers
 {
@@ -40,14 +41,14 @@ namespace BookMyShowWebApplication.Controllers
         }
 
         [HttpPost]
+        [AllowAnonymous]
         public async Task<IActionResult> Login(string username, string password)
         {
-            // Ensure _services.LoginUser is awaited if it is an asynchronous method
             var data = await _serivices.LoginUser(username, password);
             if (data == "Unauthenticated")
             {
-                
-                return Unauthorized(data); // Return an unauthorized response if not authenticated
+
+                return Unauthorized(data); 
             }
             var token = GenerateJSONWebToken(username,data);
             return Ok(new JwtTokenmodal { token = token,
@@ -55,29 +56,31 @@ namespace BookMyShowWebApplication.Controllers
                 endtime = DateTime.Now.AddMinutes(40)
             }); 
         }
-        private string GenerateJSONWebToken(string userInfo, string Role)
+        private string GenerateJSONWebToken(string userInfo, string role)
         {
             var securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_config["Jwt:Key"]));
             var credentials = new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha256);
 
             var claims = new[]
             {
-           new Claim(JwtRegisteredClaimNames.Name, userInfo),
-           new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
-           new Claim(JwtRegisteredClaimNames.Typ,Role),
-           new Claim(JwtRegisteredClaimNames.Iat, DateTimeOffset.UtcNow.ToUnixTimeSeconds().ToString(), ClaimValueTypes.Integer64), // Issued At
-            };
-          
+        new Claim(JwtRegisteredClaimNames.Sub, userInfo),
+        new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()), 
+        new Claim(ClaimTypes.Role, role), 
+        new Claim(JwtRegisteredClaimNames.Iat, DateTimeOffset.UtcNow.ToUnixTimeSeconds().ToString(), ClaimValueTypes.Integer64), 
+    };
+
             var token = new JwtSecurityToken(
-                _config["Jwt:Issuer"],
-                _config["Jwt:Issuer"],
+                _config["Jwt:Issuer"], // Issuer
+                _config["Jwt:Audience"], // Audience (You should also include this in your token validation parameters)
                 claims,
-                notBefore: DateTime.Now,
-                expires: DateTime.Now.AddMinutes(45),
+                notBefore: DateTime.UtcNow,
+                expires: DateTime.UtcNow.AddMinutes(45),
                 signingCredentials: credentials
             );
+
             return new JwtSecurityTokenHandler().WriteToken(token);
         }
+
         [HttpGet]
         public async Task<List<Citydto>> GetCitys()
         {
@@ -104,7 +107,7 @@ namespace BookMyShowWebApplication.Controllers
 
 
         [HttpGet]
-        [AllowAnonymous]
+      
         public async Task<IActionResult> Window()
         {
             var user =  _httpContextAccessor.HttpContext.User;
