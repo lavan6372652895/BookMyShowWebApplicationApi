@@ -8,20 +8,20 @@ namespace BookMyShowWebApplicationModal
 {
     public class ScreenDto
     {
-        public int ID { get; set; }
+        public int id { get; set; }
 
-        public string Code { get; set; }
+        public string code { get; set; }
 
-        public int Levels { get; set; }
+        public int levels { get; set; }
 
-        public int SeatsPerLevel { get; set; }
+        public int seatsPerLevel { get; set; }
 
-        public int TheatreID { get; set; }
+        public int theatreID { get; set; }
 
-        public int MovieID { get; set; }
+        //public int MovieID { get; set; }
 
-        public int SeatPrice { get; set; }
+        public int seatPrice { get; set; }
 
-        public DateTime ShowTime { get; set; }
+        //public DateTime ShowTime { get; set; }
     }
 }

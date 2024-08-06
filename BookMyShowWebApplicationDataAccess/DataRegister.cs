@@ -1,10 +1,12 @@
 ﻿using BookMyShowWebApplicationDataAccess.InterFaces;
 using BookMyShowWebApplicationDataAccess.InterFaces.Admin;
 using BookMyShowWebApplicationDataAccess.InterFaces.CommonRepo;
+using BookMyShowWebApplicationDataAccess.InterFaces.Theaters;
 using BookMyShowWebApplicationDataAccess.InterFaces.Users;
 using BookMyShowWebApplicationDataAccess.Services;
 using BookMyShowWebApplicationDataAccess.Services.Admin;
 using BookMyShowWebApplicationDataAccess.Services.CommonServices;
+using BookMyShowWebApplicationDataAccess.Services.Theaters;
 using BookMyShowWebApplicationDataAccess.Services.Users;
 using System;
 using System.Collections.Generic;
@@ -23,7 +25,8 @@ namespace BookMyShowWebApplicationDataAccess
              { typeof(IHome), typeof(HomeClass) },
              {typeof(IAdmin),typeof(Admins) },
              {typeof(ICommon),typeof(Common) },
-                {typeof(IuserRepo),typeof(UserRepo) }
+             {typeof(IuserRepo),typeof(UserRepo) },
+                {typeof(Itheatersrepo),typeof(Theatersrepo) },
     
 
     };

@@ -24,6 +24,7 @@ namespace BookMyShowWebApplicationCommon.Helper
             public const string Listofcities = "Sp_CityList";
             public const string LoginSp = "Sp_UserLogin";
             public const string RegistrationSp = "Sp_Registration";
+            public const string AddToken = "sp_userActivity";
         }
         public class Users()
         {
@@ -32,7 +33,13 @@ namespace BookMyShowWebApplicationCommon.Helper
             public const string ListofSeats = "Sp_ListofmovieSeates";
             public const string TicketBooking = "Sp_addBookings";
         }
+        public class Theatersowner()
+        {
+            public const string AddtheTheaters = "Sp_AddNewTheaters";
+            public const string AddNewScreen = "Sp_AddNewScreen";
+            public const string GetTheaterswithScreen = "GetTheaterWithScreens";
 
+        }
 
     }
 }

@@ -1,8 +1,10 @@
 ﻿using BookMyShowWebApplicationServices.Interface.Admin;
 using BookMyShowWebApplicationServices.Interface.IHome;
+using BookMyShowWebApplicationServices.Interface.Theater;
 using BookMyShowWebApplicationServices.Interface.Users;
 using BookMyShowWebApplicationServices.Services.Admin;
 using BookMyShowWebApplicationServices.Services.Home;
+using BookMyShowWebApplicationServices.Services.Theater;
 using BookMyShowWebApplicationServices.Services.Users;
 using System;
 using System.Collections.Generic;
@@ -21,6 +23,7 @@ namespace BookMyShowWebApplicationServices
                 { typeof(IHomenterface), typeof(HomeServices) },
                 { typeof(IAdminServices), typeof(AdminServices) },
                 {typeof(IUserServices),typeof(UserServices) },
+                {typeof(ITheaterManage) ,typeof(TheaterManage)}
             };
             return dictionary;
         }

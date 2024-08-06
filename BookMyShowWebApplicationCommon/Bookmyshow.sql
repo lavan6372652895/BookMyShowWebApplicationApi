@@ -363,7 +363,94 @@ BEGIN
     FROM userActivity
     WHERE id = SCOPE_IDENTITY();
 END;
+ --Add New Theaters
+alter PROCEDURE Sp_AddNewTheaters
+    @name NVARCHAR(200),
+    @Location NVARCHAR(400),
+    @Phone NVARCHAR(30),
+    @stateid INT,
+    @CityName INT,
+    @Email VARCHAR(200)
+AS
+BEGIN
+    DECLARE @id INT;
+    DECLARE @role VARCHAR(250);
+
+    -- Retrieve the user ID and role based on the provided email
+    SELECT @id = ur.UserID, @role = ur.Roles
+    FROM Users AS ur
+    WHERE ur.UserName = @Email;
+
+    BEGIN TRY
+        -- Check if the user ID is not null and the role is 'Theaters'
+        IF @id IS NOT NULL AND @role = 'Theaters'
+        BEGIN
+            INSERT INTO Theaters ([Name], CityName, [Location], Phone, stateid, ownersid)
+            VALUES (@name, @CityName, @Location, @Phone, @stateid, @id);
+
+			select *
+			from Theaters
+			where Theaters.TheaterID=SCOPE_IDENTITY()
+        END
+    END TRY
+    BEGIN CATCH
+        -- Handle any errors that may have occurred
+        -- You can log the error or re-throw it
+        THROW;
+    END CATCH;
+END;
+
+alter proc Sp_AddNewScreen(
+@Code varchar(250),
+@Levels int,
+@SeatsPerLevel int,
+@TheatreID int,
+@SeatPrice int
+)
+as 
+begin
+BEGIN TRY
+insert into Screen(Code,Levels,SeatsPerLevel,TheatreID,SeatPrice)
+values(@Code,@Levels,@SeatsPerLevel,@TheatreID,@SeatPrice)
+      select *
+	from Screen
+     where Screen.ID=SCOPE_IDENTITY()
+End try
+Begin catch
+return 'invalid data'
+end catch
+end
 
 
 
 
+
+alter PROCEDURE GetTheaterWithScreens
+AS
+BEGIN
+    SELECT 
+        t.TheaterID,
+        t.Name,
+        t.Location,
+        t.Phone,
+        t.stateid,
+        t.CityName,
+        t.ownersid,
+        
+        (
+            SELECT 
+                s.id,
+                s.code,
+                s.levels,
+                s.seatsPerLevel,
+                s.theatreID,
+                s.seatPrice
+            FROM screen s
+            WHERE s.theatreID = t.TheaterID
+            FOR JSON PATH
+        ) AS screen
+    FROM Theaters t;
+END;
+
+
+exec GetTheaterWithScreens
