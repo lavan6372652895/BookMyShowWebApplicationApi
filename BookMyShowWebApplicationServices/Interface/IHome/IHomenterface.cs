@@ -15,5 +15,6 @@ namespace BookMyShowWebApplicationServices.Interface.IHome
         Task<List<ActorDto>> GetActors();
         Task<List<Citydto>> GetCitys();
         Task<List<UserDto>> Adduser(UserDto user);
+        Task<List<JwtTokenmodal>> AddToken(JwtTokenmodal token, string email);
     }
 }

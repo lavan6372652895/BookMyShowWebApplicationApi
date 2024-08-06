@@ -10,6 +10,7 @@ using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
 using System.Data;
 
+
 namespace BookMyShowWebApplication.Controllers
 {
     [Route("BookMyShow/[controller]/[Action]")]
@@ -51,10 +52,15 @@ namespace BookMyShowWebApplication.Controllers
                 return Unauthorized(data); 
             }
             var token = GenerateJSONWebToken(username,data);
-            return Ok(new JwtTokenmodal { token = token,
-                starttime = DateTime.Now,
-                endtime = DateTime.Now.AddMinutes(40)
-            }); 
+           var  result  = new JwtTokenmodal()
+           {
+               token = token,
+               starttime = DateTime.Now,
+               endtime = DateTime.Now.AddMinutes(40)
+           };
+           var result1= await _serivices.AddToken(result,username);  
+
+            return Ok(result1); 
         }
         private string GenerateJSONWebToken(string userInfo, string role)
         {
@@ -63,18 +69,20 @@ namespace BookMyShowWebApplication.Controllers
 
             var claims = new[]
             {
-        new Claim(JwtRegisteredClaimNames.Sub, userInfo),
-        new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()), 
-        new Claim(ClaimTypes.Role, role), 
-        new Claim(JwtRegisteredClaimNames.Iat, DateTimeOffset.UtcNow.ToUnixTimeSeconds().ToString(), ClaimValueTypes.Integer64), 
-    };
+             new Claim(JwtRegisteredClaimNames.Sub, userInfo),
+             new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()), 
+             new Claim(ClaimTypes.Role, role), 
+             //new Claim(ClaimTypes.Expired,DateTime.UtcNow.AddMinutes(45).ToString()),
+             new Claim(JwtRegisteredClaimNames.Iat, DateTimeOffset.UtcNow.ToUnixTimeSeconds().ToString(), ClaimValueTypes.Integer64), 
+    
+            };
 
             var token = new JwtSecurityToken(
                 _config["Jwt:Issuer"], // Issuer
                 _config["Jwt:Audience"], // Audience (You should also include this in your token validation parameters)
                 claims,
-                notBefore: DateTime.UtcNow,
-                expires: DateTime.UtcNow.AddMinutes(45),
+                notBefore: DateTime.Now,
+                expires: DateTime.Now.AddMinutes(45),
                 signingCredentials: credentials
             );
 
@@ -82,6 +90,7 @@ namespace BookMyShowWebApplication.Controllers
         }
 
         [HttpGet]
+        [Authorize]
         public async Task<List<Citydto>> GetCitys()
         {
             var data = await _serivices.GetCitys();
@@ -108,7 +117,7 @@ namespace BookMyShowWebApplication.Controllers
 
         [HttpGet]
       
-        public async Task<IActionResult> Window()
+        public async Task<IActionResult> Windowidentity()
         {
             var user =  _httpContextAccessor.HttpContext.User;
             var userName = user.FindFirstValue(ClaimTypes.Name);

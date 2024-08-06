@@ -1,4 +1,5 @@
 ﻿using BookMyShowWebApplicationModal;
+using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,5 +12,6 @@ namespace BookMyShowWebApplicationDataAccess.InterFaces
     {
         Task<string>LoginUser(string username, string password);
         Task<List<UserDto>> Adduser(UserDto user);
+        Task<List<JwtTokenmodal>> AddToken(JwtTokenmodal token, string email);
     }
 }

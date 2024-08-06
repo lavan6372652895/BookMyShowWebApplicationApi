@@ -7,6 +7,8 @@ using BookMyShowWebApplicationCommon.Helper;
 using System.Data;
 using BookMyShowWebApplicationModal;
 using System.Runtime.InteropServices;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Filters;
 
 namespace BookMyShowWebApplicationDataAccess.Services
 {
@@ -17,6 +19,18 @@ namespace BookMyShowWebApplicationDataAccess.Services
         public HomeClass(IOptions<DataConfig> connectionString, IConfiguration config = null) : base(connectionString, config)
         {
             configuration = config;
+        }
+
+        public async Task<List<JwtTokenmodal>> AddToken(JwtTokenmodal token, string email)
+        {
+            var parametar = new DynamicParameters();
+            parametar.Add("@token",token.token);
+            parametar.Add("@starttime", token.starttime);
+            parametar.Add("@Endtime",token.endtime);
+            parametar.Add("@Email", email);
+            var data= await QueryAsync<JwtTokenmodal>(Storeprocedure.Common.AddToken,parametar,commandType:CommandType.StoredProcedure).ConfigureAwait(false);
+            return data.ToList();
+
         }
 
         public async Task<List<UserDto>> Adduser(UserDto user)

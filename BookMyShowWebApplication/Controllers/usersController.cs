@@ -27,6 +27,7 @@ namespace BookMyShowWebApplication.Controllers
         }
 
         [HttpGet]
+        [Authorize]
         public Task<List<MoviesDto>> GetListofMovies() {
 
             var data = _serivices.MoviesList();

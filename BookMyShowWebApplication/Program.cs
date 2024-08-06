@@ -81,6 +81,10 @@ builder.Services.AddAuthorization(options =>
     {
         policy.RequireRole("user");
     });
+    options.AddPolicy("TheatersOnly", policy =>
+    {
+        policy.RequireRole("Theaters");
+    });
 
     // Define a default policy that requires authentication
     options.FallbackPolicy = new AuthorizationPolicyBuilder()
@@ -88,8 +92,9 @@ builder.Services.AddAuthorization(options =>
         .Build();
 });
 
-var app = builder.Build();
-
+ var app = builder.Build();
+app.UseDefaultFiles();
+app.UseStaticFiles();
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {

@@ -7,6 +7,7 @@ using BookMyShowWebApplicationServices.Interface.IHome;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -20,6 +21,12 @@ namespace BookMyShowWebApplicationServices.Services.Home
         {
             _service = service;
             _common = common;
+        }
+
+        public Task<List<JwtTokenmodal>> AddToken(JwtTokenmodal token, string email)
+        {
+            var data =_service.AddToken(token, email);
+            return data;
         }
 
         public Task<List<UserDto>> Adduser(UserDto user)
