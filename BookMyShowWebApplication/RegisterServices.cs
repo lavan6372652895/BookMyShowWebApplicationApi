@@ -1,5 +1,9 @@
-﻿using BookMyShowWebApplicationDataAccess;
+﻿using BookMyShowWebApplication.backGroundTask;
+using BookMyShowWebApplication.Hub;
+using BookMyShowWebApplication.Signalr;
+using BookMyShowWebApplicationDataAccess;
 using BookMyShowWebApplicationServices;
+using Microsoft.AspNetCore.Hosting;
 
 namespace BookMyShowWebApplication
 {
@@ -9,6 +13,7 @@ namespace BookMyShowWebApplication
         {
             Configure(services, DataRegister.GetTypes());
             Configure(services, ServicesRegister.GetTypes());
+          
         }
 
         private static void Configure(IServiceCollection services, Dictionary<Type, Type> dictionary)
@@ -18,6 +23,10 @@ namespace BookMyShowWebApplication
                 services.AddScoped(type.Key, type.Value);
             }
 
+          
+            services.AddSignalR();
+          // services.AddSingleton<IMessageHubClient, MessageHub>();
+            //services.AddHostedService<BackgroundServices>();
             services.AddMvc().AddSessionStateTempDataProvider();
             services.AddSession();
             services.AddMvc();

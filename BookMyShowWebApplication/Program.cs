@@ -12,7 +12,6 @@ builder.Services.Configure<DataConfig>(builder.Configuration.GetSection("Connect
 
 // Add services to the container.
 builder.Services.AddControllers();
-
 builder.Services.AddHttpClient();
 builder.Services.AddSignalR();
 RegisterServices.RegisterService(builder.Services);
@@ -62,7 +61,7 @@ builder.Services.AddAuthentication(options => {
         ValidateAudience = false,
         ValidAudience = "http://localhost:5101",
         ValidIssuer = "http://localhost:5101",
-        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["Jwt:Key"])),
+        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["Jwt:Key"]??string.Empty)),
         ClockSkew = TimeSpan.Zero
     };
 });
@@ -81,7 +80,7 @@ builder.Services.AddAuthorization(options =>
     {
         policy.RequireRole("user");
     });
-    options.AddPolicy("TheatersOnly", policy =>
+   options.AddPolicy("TheatersOnly", policy =>
     {
         policy.RequireRole("Theaters");
     });
@@ -103,12 +102,20 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
-app.UseCors(policy => policy.AllowAnyHeader().AllowAnyMethod().AllowAnyOrigin());
+app.UseCors(policy =>
+    policy
+        .WithOrigins("http://localhost:4200") // Specify the exact origin
+        .AllowAnyHeader()
+        .AllowAnyMethod()
+        .AllowCredentials() // Allow credentials
+);
 
 // Order of middleware matters
 app.UseRouting();
 app.UseAuthentication();  // Add this line to ensure authentication is applied
 app.UseAuthorization();   // Ensure this is placed after UseRouting and UseAuthentication
+app.UseWebSockets();
+
 // add the Signair
 app.UseEndpoints(endpoints =>
 {

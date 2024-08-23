@@ -1,7 +1,10 @@
-﻿namespace BookMyShowWebApplication.Hub
+﻿using BookMyShowWebApplicationModal;
+using Microsoft.AspNetCore.Authorization;
+namespace BookMyShowWebApplication.Hub
 {
+   
     public interface IMessageHubClient
     {
-        Task SendOffersToUser(List<string> message);
+        Task subscribernotification(Notificationdto message);
     }
 }
