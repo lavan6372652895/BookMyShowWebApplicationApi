@@ -14,6 +14,6 @@ namespace BookMyShowWebApplicationDataAccess.InterFaces.CommonRepo
         Task<List<ActorDto>> GetActors();
         Task<List<Citydto>> GetCitys();
         Task<UserDto> SingleUser(string username);
-        Task<BookMyShowWebApplicationModal.PaginationDto> GetPaginationData(int  page, int pageSize); 
+        //Task<BookMyShowWebApplicationModal.PaginationDto> GetPaginationData(int  page, int pageSize); 
     }
 }
