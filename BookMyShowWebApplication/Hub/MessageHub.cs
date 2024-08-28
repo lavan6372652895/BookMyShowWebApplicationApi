@@ -9,15 +9,21 @@ namespace BookMyShowWebApplication.Signalr
     {
         public async Task subscribernotification(Notificationdto message)
         {
+           
             
             await Clients.All.subscribernotification(message);
         }
-        public override Task OnConnectedAsync()
+        public async Task SendernotificationToUser(Notificationdto message ,string userId)
         {
-           
-            //Groups.AddToGroupAsync(); ;
-            return base.OnConnectedAsync();
+         
+            await Clients.User(userId).SendernotificationToUser(message);
         }
+        public async Task sendNotificationListofusers(Notificationdto message,List<string>userid) {
+
+            await Clients.Users(userid).sendNotificationListofusers(message);
+        
+        }
+
 
     }
 }

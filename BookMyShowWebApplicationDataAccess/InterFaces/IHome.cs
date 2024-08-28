@@ -10,8 +10,9 @@ namespace BookMyShowWebApplicationDataAccess.InterFaces
 {
     public interface IHome
     {
-        Task<string>LoginUser(string username, string password);
+        Task<string>LoginUser(Logindto logindto);
         Task<List<UserDto>> Adduser(UserDto user);
         Task<List<JwtTokenmodal>> AddToken(JwtTokenmodal token, string email);
+        Task<int> ForgotPassword(Logindto logindto);
     }
 }

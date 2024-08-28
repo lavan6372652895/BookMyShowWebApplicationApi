@@ -14,7 +14,7 @@ namespace BookMyShowWebApplicationDataAccess.Services
 {
     public class HomeClass : BaseRepository,IHome
     {
-        private IConfiguration configuration;
+        private readonly IConfiguration configuration;
 
         public HomeClass(IOptions<DataConfig> connectionString, IConfiguration config = null) : base(connectionString, config)
         {
@@ -40,15 +40,25 @@ namespace BookMyShowWebApplicationDataAccess.Services
             parametar.Add("@username",user.UserName);
             parametar.Add("@phonenumber",user.phonenumber);
             parametar.Add("@password",user.passwords);
-            parametar.Add("@Role",user.Role);
+            parametar.Add("@Role",user.Roles);
             var data = await QueryAsync<UserDto>(Storeprocedure.Common.RegistrationSp,parametar,commandType:CommandType.StoredProcedure).ConfigureAwait(false);
             return data.ToList();
         }
-        public async Task<string> LoginUser(string username, string password)
+
+        public async Task<int> ForgotPassword(Logindto logindto)
+        {
+           var parametar =new DynamicParameters();
+            parametar.Add("@password",logindto.password);
+            parametar.Add("@email",logindto.email);
+            var data = await QueryAsync<int>(Storeprocedure.Common.Forgotpassword,parametar,commandType:CommandType.StoredProcedure).ConfigureAwait(false);
+            return data.First();
+        }
+
+        public async Task<string> LoginUser(Logindto logindto)
         {
             var parametar = new DynamicParameters();
-            parametar.Add("@UserName", username);
-            parametar.Add("@password", password);
+            parametar.Add("@UserName", logindto.email);
+            parametar.Add("@password", logindto.password);
             var Data = await QueryFirstOrDefaultAsync<string>(Storeprocedure.Common.LoginSp, parametar, commandType: CommandType.StoredProcedure);
             return Data;
         }

@@ -1,11 +1,14 @@
-﻿using BookMyShowWebApplicationDataAccess.InterFaces;
+﻿using AutoMapper;
+using BookMyShowWebApplicationDataAccess.InterFaces;
 using BookMyShowWebApplicationDataAccess.InterFaces.Admin;
 using BookMyShowWebApplicationDataAccess.InterFaces.CommonRepo;
+using BookMyShowWebApplicationDataAccess.InterFaces.Email;
 using BookMyShowWebApplicationDataAccess.InterFaces.Theaters;
 using BookMyShowWebApplicationDataAccess.InterFaces.Users;
 using BookMyShowWebApplicationDataAccess.Services;
 using BookMyShowWebApplicationDataAccess.Services.Admin;
 using BookMyShowWebApplicationDataAccess.Services.CommonServices;
+using BookMyShowWebApplicationDataAccess.Services.Email;
 using BookMyShowWebApplicationDataAccess.Services.Theaters;
 using BookMyShowWebApplicationDataAccess.Services.Users;
 using System;
@@ -21,15 +24,15 @@ namespace BookMyShowWebApplicationDataAccess
     {
         public static Dictionary<Type, Type> GetTypes()
         {
-            var dictionary = new Dictionary<Type, Type>() {
+            var dictionary = new Dictionary<Type, Type>()
+            {
              { typeof(IHome), typeof(HomeClass) },
              {typeof(IAdmin),typeof(Admins) },
              {typeof(ICommon),typeof(Common) },
              {typeof(IuserRepo),typeof(UserRepo) },
-                {typeof(Itheatersrepo),typeof(Theatersrepo) },
-    
-
-    };
+             {typeof(Itheatersrepo),typeof(Theatersrepo) },
+             {typeof(Iemail),typeof(Email) },
+            };
             return dictionary;
         }
     }

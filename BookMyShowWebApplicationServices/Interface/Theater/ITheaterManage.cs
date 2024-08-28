@@ -12,5 +12,6 @@ namespace BookMyShowWebApplicationServices.Interface.Theater
         Task<List<TheatersDto>> AddNewTheater(TheatersDto Theater);
         Task<List<ScreenDto>> AddNewScren(ScreenDto screen);
         Task<List<TheatersDto>> GetTheaterWithScreens();
+        Task<List<Showtime>> AddShow(Showtime show);
     }
 }

@@ -1,6 +1,8 @@
-﻿using BookMyShowWebApplicationModal;
+﻿using AutoMapper.Configuration.Annotations;
+using BookMyShowWebApplicationModal;
 using BookMyShowWebApplicationModal.Admin;
 using BookMyShowWebApplicationServices.Interface.Admin;
+using BookMyShowWebApplicationServices.Interface.ICommonMethods;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -15,45 +17,37 @@ namespace BookMyShowWebApplication.Controllers
     {
         private IConfiguration _config;
         private IAdminServices _Services;
-        public AdminController(IConfiguration config, IAdminServices service)
+        private ICommonMethods _CommonMethods;
+        public AdminController(IConfiguration config, IAdminServices service, ICommonMethods commonMethods)
         {
             _config = config;
             _Services = service;
+            _CommonMethods = commonMethods;
         }
         [HttpPost]
         public async Task<List<MoviesDto>> AddNewmovies(MoviesDto movies)
         {
+          
 
-           
+
             var data=await _Services.AddNewMovie(movies).ConfigureAwait(false);
-            if (data != null)
-            {
-                return data.ToList();
-            }
-            else { 
-            return data.ToList();
-            }
+            return data?.ToList() ?? new List<MoviesDto>();
 
         }
         [HttpGet]
         public async Task<List<GenreDto>> GetAllGenre()
         {
+
+            string token = HttpContext.Request.Headers.Authorization.ToString();
+            var user = _CommonMethods.GetUserTokenData(token);
             var data = await _Services.GetListofGenre();
-            return data.ToList();
+            return data?.ToList() ?? new List<GenreDto>();
         }
         [HttpPost]
         public async Task<List<ActorDto>> AddNewActor(ActorDto act)
         {
             var data = await _Services.AddNewActor(act);
-            if (data != null) {
-
-                return data.ToList();
-
-            }
-            else {
-                return data.ToList();
-            }
-            
+            return data?.ToList() ?? new List<ActorDto>();
         }
 
     }

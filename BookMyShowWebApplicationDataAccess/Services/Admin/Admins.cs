@@ -16,9 +16,10 @@ using System.Threading.Tasks;
 
 namespace BookMyShowWebApplicationDataAccess.Services.Admin
 {
-    public class Admins : BaseRepository,IAdmin
+    public class Admins : BaseRepository, IAdmin
     {
-        public IConfiguration configuration;
+        public readonly IConfiguration configuration;
+
         public Admins(IOptions<DataConfig> connectionString, IConfiguration config = null) : base(connectionString, config) {
             configuration = config;
         }

@@ -12,13 +12,12 @@ namespace BookMyShowWebApplicationDataAccess
         public class BaseRepository
         {
             public readonly IOptions<DataConfig> _ConnectionString;
-
             public readonly IConfiguration configuration;
+            private SqlConnection Conn;
 
+        #region constructor
 
-            #region constructor
-
-            public BaseRepository(IOptions<DataConfig> connectionString, IConfiguration config = null)
+        public BaseRepository(IOptions<DataConfig> connectionString, IConfiguration config = null)
 
             {
 
@@ -95,8 +94,31 @@ namespace BookMyShowWebApplicationDataAccess
                 }
 
             }
+        public async Task<SqlMapper.GridReader> QueryMultipleAsync<T>(string sql, object? param = null, IDbTransaction? transaction = null, int? commandTimeout = null, CommandType? commandType = null)
+        {
+            string? conString = ConfigurationExtensions.GetConnectionString(this.configuration, "DefaultConnection");
 
-            #endregion
+            using (SqlConnection con = new SqlConnection(conString))
+            {
+                await con.OpenAsync();
+                return await con.QueryMultipleAsync(sql,param, commandType: CommandType.StoredProcedure);
+            }
+               
         }
+
+        public async Task CloseConnAsync()
+        {
+            string? conString = ConfigurationExtensions.GetConnectionString(this.configuration, "DefaultConnection");
+            using (SqlConnection con = new SqlConnection(conString))
+            {
+                if (Conn.State == ConnectionState.Open)
+                    await Conn.CloseAsync();
+            }
+                
+        }
+
+
+        #endregion
     }
+}
 

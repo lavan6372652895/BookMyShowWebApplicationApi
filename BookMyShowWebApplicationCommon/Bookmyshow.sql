@@ -452,5 +452,94 @@ BEGIN
     FROM Theaters t;
 END;
 
+alter proc sp_forgotpassword
+@password varchar(250),
+@email varchar(250)
+as
+begin
+declare @statuscode int
+begin try
+update Users
+set passwords=@password,
+passwordmodifydate=getdate()
+where UserName=@email
+set @statuscode =200
+select @statuscode as statuscode
+end try
+begin catch
+set @statuscode =100
+select @statuscode as statuscode
+end catch
+end
 
 exec GetTheaterWithScreens
+
+create table Notifications(
+id int primary key identity(100,1),
+title varchar(250),
+Notificationmessage nvarchar(max),
+fromnotification varchar(250),
+tonotification varchar(250),
+notificationdate varchar(250)
+)
+ALTER TABLE Notifications
+ADD Readstatus VARCHAR(10) DEFAULT 'unread';
+-- Add a check constraint to enforce valid values
+ALTER TABLE Notifications
+ADD CONSTRAINT chk_Readstatus CHECK (Readstatus IN ('unread', 'read', 'archived'));
+
+alter proc Sp_AddShowtimeing(
+@MovieID int,
+@ShowDate date,
+@showtime time,
+@screenid int
+)
+As
+begin
+insert into Showtimes(MovieID,ShowDate,ShowTime,ScreenId)
+values(@MovieID,@ShowDate,@showtime,@screenid)
+--select * from Showtimes 
+--where ShowtimeID=SCOPE_IDENTITY()
+End
+
+select * from Screen
+
+select * from Movie
+
+create proc Sp_getsingleuserdata(
+@Email varchar(250)
+)
+as
+begin
+select *
+from Users as us
+where us.UserName=@Email
+end
+
+alter PROCEDURE Sp_paginationdata
+    @pageIndex INT,
+    @pageSize INT
+	
+AS
+BEGIN
+    -- Calculate total items count
+    DECLARE @totalItems INT;
+    SELECT @totalItems = COUNT(*) FROM Seats;
+
+    -- Calculate the starting row number for the current page
+    DECLARE @startRow INT = (@pageIndex - 1) * @pageSize + 1;
+    DECLARE @endRow INT = @pageIndex * @pageSize;
+
+    -- Retrieve paginated data
+    ;WITH PaginatedSeats AS (
+        SELECT 
+            *,
+            ROW_NUMBER() OVER (ORDER BY SeatID) AS RowNum
+        FROM Seats
+    )
+    SELECT @totalItems AS TotalItems, * 
+    FROM PaginatedSeats
+    WHERE RowNum BETWEEN @startRow AND @endRow;
+END
+
+exec Sp_paginationdata 3,6

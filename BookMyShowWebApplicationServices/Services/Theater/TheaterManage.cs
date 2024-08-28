@@ -30,6 +30,12 @@ namespace BookMyShowWebApplicationServices.Services.Theater
             return data;
         }
 
+        public async Task<List<Showtime>> AddShow(Showtime show)
+        {
+            var data = await _theatersrepo.AddShow(show);
+            return data;
+        }
+
         public async Task<List<TheatersDto>> GetTheaterWithScreens()
         {
            var data = await _theatersrepo.GetTheaterWithScreens();

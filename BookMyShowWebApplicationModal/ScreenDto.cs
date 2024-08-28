@@ -24,4 +24,15 @@ namespace BookMyShowWebApplicationModal
 
         //public DateTime ShowTime { get; set; }
     }
+
+    public class Showtime
+    {
+        public int ShowtimeID { get; set; }
+        public int MovieID { get; set; }
+        public DateTime ShowDate {  get; set; } 
+        public DateTime ShowTime {  get; set; }
+        public int ScreenId {  get; set; }
+
+    }
+
 }

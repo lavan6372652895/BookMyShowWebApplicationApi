@@ -11,4 +11,9 @@ namespace BookMyShowWebApplicationModal
         public int Id {  get; set; }
         public string CityName { get; set; }
     }
+    public class Googledto
+    {
+        public int Id { get; set; }
+        public string Address { get; set; }
+    }
 }

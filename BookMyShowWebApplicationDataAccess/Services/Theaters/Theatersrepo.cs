@@ -50,6 +50,17 @@ namespace BookMyShowWebApplicationDataAccess.Services.Theaters
             return data.ToList();
         }
 
+        public async Task<List<Showtime>> AddShow(Showtime show)
+        {
+            var parametar = new DynamicParameters();
+            parametar.Add("@MovieID",show.MovieID);
+            parametar.Add("@ShowDate",show.ShowDate);
+            parametar.Add("@showtime", show.ShowTime);
+            parametar.Add("@screenid", show.ScreenId);
+            var data = await QueryAsync<Showtime>(Storeprocedure.Theatersowner.AddShowTimeing,parametar,commandType:CommandType.StoredProcedure).ConfigureAwait(false);
+            return data.ToList();  
+        }
+
         public async Task<List<TheatersDto>> GetTheaterWithScreens()
         {
             var data = await QueryAsync<dynamic>(Storeprocedure.Theatersowner.GetTheaterswithScreen, commandType: CommandType.StoredProcedure).ConfigureAwait(false);
@@ -75,6 +86,7 @@ namespace BookMyShowWebApplicationDataAccess.Services.Theaters
 
             return theaterList;
         }
+
 
     }
 }

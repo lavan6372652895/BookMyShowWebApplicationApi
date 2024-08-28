@@ -35,6 +35,12 @@ namespace BookMyShowWebApplicationServices.Services.Home
             return data;
         }
 
+        public Task<int> ForgotPassword(Logindto logindto)
+        {
+           var data =_service.ForgotPassword(logindto);
+            return data;
+        }
+
         public Task<List<ActorDto>> GetActors()
         {
             var data = _common.GetActors();
@@ -47,15 +53,21 @@ namespace BookMyShowWebApplicationServices.Services.Home
             return data;
         }
 
-        public  Task<List<RoleDto>> GetRoles()
+        public Task<List<RoleDto>> GetRoles()
         {
             var data = _common.GetRoles();
             return data;
         }
 
-        public Task<string> LoginUser(string username, string password)
+        public Task<string> LoginUser(Logindto logindto)
         {
-           var data =_service.LoginUser(username, password);
+           var data =_service.LoginUser(logindto);
+            return data;
+        }
+
+        public Task<UserDto> SingleUser(string username)
+        {
+            var data =_common.SingleUser(username);
             return data;
         }
     }

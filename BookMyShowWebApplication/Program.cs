@@ -64,6 +64,16 @@ builder.Services.AddAuthentication(options => {
         IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["Jwt:Key"]??string.Empty)),
         ClockSkew = TimeSpan.Zero
     };
+    options.Events = new JwtBearerEvents
+    {
+        OnMessageReceived = jt =>
+        {
+            jt.Request.Cookies.TryGetValue("accessToken", out var accessToken);
+            if(!string.IsNullOrEmpty(accessToken))
+                jt.Token=accessToken;
+            return Task.CompletedTask;
+        }
+    };
 });
 
 
@@ -114,7 +124,7 @@ app.UseCors(policy =>
 app.UseRouting();
 app.UseAuthentication();  // Add this line to ensure authentication is applied
 app.UseAuthorization();   // Ensure this is placed after UseRouting and UseAuthentication
-app.UseWebSockets();
+//app.UseWebSockets();
 
 // add the Signair
 app.UseEndpoints(endpoints =>

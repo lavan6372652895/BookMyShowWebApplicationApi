@@ -13,21 +13,24 @@ namespace BookMyShowWebApplication.Controllers
 {
     [Route("api/[controller]/[Action]")]
     [ApiController]
-   // [Authorize(Roles = "user")]
+    [Authorize(Roles = "user")]
     public class UsersController : ControllerBase
     {
         public IConfiguration _config;
         public IUserServices _serivices;
         private readonly IHubContext<MessageHub> _hubContext;
+        //private readonly CustomUserIdProvider _customUserIdProvider;
         public UsersController(IConfiguration config, IUserServices serivices, IHubContext<MessageHub> hubContext)
+            //CustomUserIdProvider customUserIdProvider)
         {
             _config = config;
             _serivices = serivices;
             _hubContext = hubContext;
+            //_customUserIdProvider = customUserIdProvider;
         }
 
         [HttpGet]
-        [Authorize]
+        [AllowAnonymous]
         public Task<List<MoviesDto>> GetListofMovies() {
 
             var data = _serivices.MoviesList();
@@ -43,6 +46,9 @@ namespace BookMyShowWebApplication.Controllers
         [HttpGet]
         public Task<List<ListofMovieTheaterscs>> TheaterList(int movieid, int cityid)
         {
+            //string token = HttpContext.Request.Headers.Authorization;
+            //string? nameIdentifier = _customUserIdProvider.GetUserId(HttpContext.Connection);
+
             var data = _serivices.moviesListOfTheaterList(movieid, cityid);
             if (data.Result.Count > 0)
             {
