@@ -14,6 +14,7 @@ using Newtonsoft.Json.Linq;
 using System.Runtime.InteropServices;
 using Microsoft.AspNetCore.DataProtection.KeyManagement;
 using static BookMyShowWebApplicationCommon.Helper.Storeprocedure;
+using Microsoft.AspNetCore.Authentication.Cookies;
 namespace BookMyShowWebApplication.Controllers
 {
     [Route("BookMyShow/[controller]/[Action]")]
@@ -102,13 +103,23 @@ namespace BookMyShowWebApplication.Controllers
                     var userdeatils = await _serivices.SingleUser(logindto.email ?? string.Empty);
                     var token = GenerateJSONWebToken(userdeatils, result);
 
+                   
                      jwtTokenModal = new JwtTokenmodal
                     {
                         token = token,
                         starttime = DateTime.Now,
-                        endtime = DateTime.Now.AddMinutes(40)
+                        endtime = DateTime.Now.AddDays(1)
                     };
                     // Optionally save the token in the database or cache
+                    var cookieOptions = new CookieOptions
+                    {
+                        HttpOnly = true, // Makes the cookie inaccessible to JavaScript
+                        Secure = true,   // Ensures the cookie is only sent over HTTPS
+                        SameSite = SameSiteMode.Strict, // Helps to prevent CSRF attacks
+                        Expires = DateTime.Now.AddDays(1) // Cookie expiration
+                    };
+
+                    HttpContext.Response.Cookies.Append("accessToken", token, cookieOptions);
                     var result1=   await _serivices.AddToken(jwtTokenModal, logindto.email ?? string.Empty).ConfigureAwait(false);
                    
 
@@ -127,57 +138,7 @@ namespace BookMyShowWebApplication.Controllers
 
             return response;
         }
-        //private string GenerateJSONWebToken(UserDto userInfo, string role)
-        //{
-        //    var securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_config["Jwt:Key"] ?? string.Empty));
-        //    var credentials = new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha256);
-
-        //    //var claims = new[]
-        //    //{
-        //    // new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()), 
-        //    // new Claim(ClaimTypes.Role, role), 
-        //    // new Claim(ClaimTypes.NameIdentifier, userInfo.UserName??string.Empty),
-        //    // new Claim(JwtRegisteredClaimNames.Iat, DateTimeOffset.UtcNow.ToUnixTimeSeconds().ToString(), ClaimValueTypes.Integer64),
-
-
-        //    //};
-        //    var tokenDescriptor = new SecurityTokenDescriptor
-        //    {
-
-
-
-        //        Subject = new ClaimsIdentity(new Claim[]
-        //        {
-        //             new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
-        //     new Claim(ClaimTypes.Role, role),
-        //     new Claim(ClaimTypes.NameIdentifier, userInfo.UserName??string.Empty),
-        //     new Claim(JwtRegisteredClaimNames.Iat, DateTimeOffset.UtcNow.ToUnixTimeSeconds().ToString(), ClaimValueTypes.Integer64),
-        //           new Claim("_useridId", (userInfo.useridId).ToString()),
-        //           new Claim("_Role", (userInfo.Role).ToString()),
-        //           new Claim("phonenumber", (userInfo.phonenumber).ToString()),
-        //           new Claim("FullName", (userInfo.FullName).ToString()),
-        //            new Claim("UserName", (userInfo.UserName).ToString()),
-
-        //        }),
-
-        //    };
-
-
-
-        //    //var token = new JwtSecurityToken(
-        //    //    _config["Jwt:Issuer"], // Issuer
-        //    //    _config["Jwt:Audience"], // Audience (You should also include this in your token validation parameters)
-        //    //    tokenDescriptor ?? [],
-        //    //    notBefore: DateTime.Now,
-        //    //    expires: DateTime.Now.AddMinutes(45),
-        //    //    signingCredentials: credentials
-        //    //);
-        //    var tokenHandler = new JwtSecurityTokenHandler();
-
-        //    var token = tokenHandler.CreateToken(tokenDescriptor);
-        //    return new JwtSecurityTokenHandler().WriteToken(token);
-        //}
-
+        
         private string GenerateJSONWebToken(UserDto userInfo, string role)
         {
             if (userInfo == null)
@@ -188,22 +149,15 @@ namespace BookMyShowWebApplication.Controllers
                 throw new InvalidOperationException("JWT Key is not configured.");
 
             var issuer = _config["Jwt:Issuer"];
-            //var audience = _config["Jwt:Audience"];
-            //if (string.IsNullOrEmpty(issuer) || string.IsNullOrEmpty(audience))
-            //    throw new InvalidOperationException("JWT Issuer or Audience is not configured.");
-
             var securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(key));
             var credentials = new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha256);
-
             // Ensure the properties of userInfo are not null
             var userName = userInfo.UserName ?? string.Empty;
             var userId = userInfo.userid.ToString();
             var userRole = userInfo.Roles ?? string.Empty;
             var phoneNumber = userInfo.phonenumber ?? string.Empty;
             var fullName = userInfo.FullName ?? string.Empty;
-
-            var expiration = DateTime.UtcNow.AddMinutes(45); // Adjust as necessary
-
+            var expiration = DateTime.UtcNow.AddMinutes(45); 
             var tokenDescriptor = new SecurityTokenDescriptor
             {
                 Subject = new ClaimsIdentity(new[]
@@ -218,7 +172,7 @@ namespace BookMyShowWebApplication.Controllers
             new Claim("FullName", fullName),
             new Claim("UserName", userName),
            
-        }),
+             }),
                 Expires = expiration,
                 Issuer = issuer, // Issuer
                 //Audience = audience, // Audience
@@ -307,6 +261,16 @@ namespace BookMyShowWebApplication.Controllers
             }
 
             return response;
+        }
+        [HttpGet]
+        [AllowAnonymous]
+        public IActionResult Logout()
+        {
+            // Delete the authentication cookie
+            HttpContext.Response.Cookies.Delete("accessToken");
+
+            // Return a success response
+            return Ok(new { success = true });
         }
 
 

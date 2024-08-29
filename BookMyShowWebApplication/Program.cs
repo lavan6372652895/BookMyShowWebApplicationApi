@@ -64,13 +64,15 @@ builder.Services.AddAuthentication(options => {
         IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["Jwt:Key"]??string.Empty)),
         ClockSkew = TimeSpan.Zero
     };
+
+    //cookies Token setup
     options.Events = new JwtBearerEvents
     {
         OnMessageReceived = jt =>
         {
             jt.Request.Cookies.TryGetValue("accessToken", out var accessToken);
-            if(!string.IsNullOrEmpty(accessToken))
-                jt.Token=accessToken;
+            if (!string.IsNullOrEmpty(accessToken))
+                jt.Token = accessToken;
             return Task.CompletedTask;
         }
     };
