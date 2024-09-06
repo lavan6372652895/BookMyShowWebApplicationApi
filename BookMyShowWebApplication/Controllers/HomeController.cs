@@ -6,15 +6,11 @@ using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
-using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
-using System.Data;
 using BookMyShowWebApplicationCommon.Helper;
-using Newtonsoft.Json.Linq;
-using System.Runtime.InteropServices;
-using Microsoft.AspNetCore.DataProtection.KeyManagement;
-using static BookMyShowWebApplicationCommon.Helper.Storeprocedure;
-using Microsoft.AspNetCore.Authentication.Cookies;
+using OpenAI_API;
+
+using OpenAI_API.Chat;
 namespace BookMyShowWebApplication.Controllers
 {
     [Route("BookMyShow/[controller]/[Action]")]
@@ -26,12 +22,14 @@ namespace BookMyShowWebApplication.Controllers
         public IHomenterface _serivices;
         private readonly IHttpContextAccessor _httpContextAccessor;
         private readonly ILogger<HomeController> _logger;
+       
         public HomeController(IConfiguration config, IHomenterface serivices, IHttpContextAccessor httpContextAccessor, ILogger<HomeController> logger)
         {
             _config = config;
             _serivices = serivices;
             _httpContextAccessor = httpContextAccessor;
             _logger = logger;
+          
         }
         [HttpGet]
         public async Task<ApiResponse<RoleDto>> GetRoles()
@@ -116,7 +114,8 @@ namespace BookMyShowWebApplication.Controllers
                         HttpOnly = true, // Makes the cookie inaccessible to JavaScript
                         Secure = true,   // Ensures the cookie is only sent over HTTPS
                         SameSite = SameSiteMode.Strict, // Helps to prevent CSRF attacks
-                        Expires = DateTime.Now.AddDays(1) // Cookie expiration
+                        Expires = DateTime.Now.AddDays(1), // Cookie expiration
+                        
                     };
 
                     HttpContext.Response.Cookies.Append("accessToken", token, cookieOptions);
@@ -212,22 +211,6 @@ namespace BookMyShowWebApplication.Controllers
             }
             return BadRequest(user);
         }
-
-
-        //[HttpGet]
-        //public async Task<IActionResult> Windowidentity()
-        //{
-        //    var user = await _httpContextAccessor.HttpContext.User;
-        //    var userName = user.FindFirstValue(ClaimTypes.Name);
-        //    if (userName != null)
-        //    {
-        //        return Ok(userName);
-        //    }
-        //    else
-        //    {
-        //        return Unauthorized();
-        //    }
-        //}
         [HttpPost]
         [AllowAnonymous]
         public async Task<ApiPostResponse<Logindto>> ForgotPasswordAsync(Logindto login)
@@ -273,6 +256,70 @@ namespace BookMyShowWebApplication.Controllers
             return Ok(new { success = true });
         }
 
+        //[AllowAnonymous]
+        //[HttpPost]
+        //public async Task<IActionResult>chatGpt(string inputvalue)
+        //{
 
+        //    string apikey = "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";
+        //    string response = "";
+        //    OpenAIAPI openai=new OpenAIAPI(apikey);
+        //    CompletionRequest completionRequest = new CompletionRequest();
+        //    completionRequest.Prompt = inputvalue;
+        //    completionRequest.Model = "text-davinci-003";
+        //    completionRequest.MaxTokens = 400;
+        //    var output= await openai.Completions.CreateCompletionAsync(completionRequest);
+        //    if (output != null) {
+
+        //        foreach (var item in output.Completions) {
+        //            response += item.Text;
+        //        }
+        //        return Ok(response);    
+        //    }
+        //    else
+        //    {
+        //        return BadRequest(output);
+        //    }
+        //}
+
+        [AllowAnonymous]
+        [HttpPost("chatGpt")]
+        public async Task<IActionResult> ChatGpt(string inputvalue)
+        {
+            if (string.IsNullOrWhiteSpace(inputvalue))
+            {
+                return BadRequest("Input value cannot be empty.");
+            }
+            string apikey = "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";
+            OpenAIAPI _openai = new OpenAIAPI(apikey);
+           try
+        {
+            var chatRequest = new OpenAI_API.Chat.ChatRequest
+            {
+                Model = "gpt-3.5-turbo",
+                Messages = new[] { new OpenAI_API.Chat.ChatMessage { TextContent = inputvalue } }
+            };
+
+            var response = await _openai.Chat.CreateChatCompletionAsync(chatRequest);
+
+            if (response != null && response.Choices.Count > 0)
+            {
+                var result = response.Choices[0].Message.Content;
+                return Ok(result);
+            }
+
+            return BadRequest("No completions received from the API.");
+        }
+        catch (HttpRequestException ex) when (ex.Message.Contains("insufficient_quota"))
+        {
+            // Handle quota errors
+            return StatusCode(429, "API quota exceeded. Please check your usage and billing details.");
+        }
+        catch (Exception ex)
+        {
+            // Handle other exceptions
+            return StatusCode(500, $"Internal server error: {ex.Message}");
+        }
+    }
     }
 }
