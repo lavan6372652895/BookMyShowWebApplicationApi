@@ -19,14 +19,11 @@ namespace BookMyShowWebApplication.Controllers
         public IConfiguration _config;
         public IUserServices _serivices;
         private readonly IHubContext<MessageHub> _hubContext;
-        //private readonly CustomUserIdProvider _customUserIdProvider;
         public UsersController(IConfiguration config, IUserServices serivices, IHubContext<MessageHub> hubContext)
-            //CustomUserIdProvider customUserIdProvider)
         {
             _config = config;
             _serivices = serivices;
             _hubContext = hubContext;
-            //_customUserIdProvider = customUserIdProvider;
         }
 
         [HttpGet]

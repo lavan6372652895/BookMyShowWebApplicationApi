@@ -174,7 +174,6 @@ namespace BookMyShowWebApplication.Controllers
              }),
                 Expires = expiration,
                 Issuer = issuer, // Issuer
-                //Audience = audience, // Audience
                 SigningCredentials = credentials
             };
 
@@ -255,33 +254,7 @@ namespace BookMyShowWebApplication.Controllers
             // Return a success response
             return Ok(new { success = true });
         }
-
-        //[AllowAnonymous]
-        //[HttpPost]
-        //public async Task<IActionResult>chatGpt(string inputvalue)
-        //{
-
-        //    string apikey = "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";
-        //    string response = "";
-        //    OpenAIAPI openai=new OpenAIAPI(apikey);
-        //    CompletionRequest completionRequest = new CompletionRequest();
-        //    completionRequest.Prompt = inputvalue;
-        //    completionRequest.Model = "text-davinci-003";
-        //    completionRequest.MaxTokens = 400;
-        //    var output= await openai.Completions.CreateCompletionAsync(completionRequest);
-        //    if (output != null) {
-
-        //        foreach (var item in output.Completions) {
-        //            response += item.Text;
-        //        }
-        //        return Ok(response);    
-        //    }
-        //    else
-        //    {
-        //        return BadRequest(output);
-        //    }
-        //}
-
+              
         [AllowAnonymous]
         [HttpPost("chatGpt")]
         public async Task<IActionResult> ChatGpt(string inputvalue)

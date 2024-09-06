@@ -17,12 +17,7 @@ namespace BookMyShowWebApplicationModal
         public int seatsPerLevel { get; set; }
 
         public int theatreID { get; set; }
-
-        //public int MovieID { get; set; }
-
         public int seatPrice { get; set; }
-
-        //public DateTime ShowTime { get; set; }
     }
 
     public class Showtime

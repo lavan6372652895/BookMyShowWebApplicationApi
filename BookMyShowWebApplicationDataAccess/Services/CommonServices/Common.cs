@@ -37,29 +37,18 @@ namespace BookMyShowWebApplicationDataAccess.Services.CommonServices
             var data = await QueryAsync < Citydto >(Storeprocedure.Common.Listofcities,commandType:CommandType.StoredProcedure).ConfigureAwait(false);
             return data.ToList();
         }
-
-        //public async Task<List<RoleDto>> GetRoles()
-        //{
-        //    //RoleDto data =new();
-        //   var result = await QueryMultipleAsync<RoleDto>(Storeprocedure.Common.ListofRoles, commandType: CommandType.StoredProcedure).ConfigureAwait(false);
-        //    var data = result.Read<RoleDto>().ToList();
-        //    return data;
-        //}
         public async Task<List<RoleDto>> GetRoles()
         {
             try
             {
                 var result = await QueryAsync<RoleDto>(Storeprocedure.Common.ListofRoles, commandType: CommandType.StoredProcedure).ConfigureAwait(false);
                 var roles = result.ToList();
-                //await CloseConnAsync().ConfigureAwait(false);
+              
                 return roles;  
             }
             catch (Exception ex)
             {
-                // Log the exception (consider using a logging framework)
-                //_logger.LogError(ex, "An error occurred while fetching roles.");
-
-                // Handle or rethrow the exception as necessary
+               
                 throw ex;
             }
         }

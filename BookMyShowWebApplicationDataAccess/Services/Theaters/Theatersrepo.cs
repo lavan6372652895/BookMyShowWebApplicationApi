@@ -23,7 +23,6 @@ namespace BookMyShowWebApplicationDataAccess.Services.Theaters
         {
             configuration = config;
         }
-
         public async Task<List<ScreenDto>>AddNewScren(ScreenDto screen)
         {
             var parametar = new DynamicParameters();
@@ -65,7 +64,6 @@ namespace BookMyShowWebApplicationDataAccess.Services.Theaters
         {
             var data = await QueryAsync<dynamic>(Storeprocedure.Theatersowner.GetTheaterswithScreen, commandType: CommandType.StoredProcedure).ConfigureAwait(false);
             List<TheatersDto> theaterList = new List<TheatersDto>();
-
             foreach (var item in data)
             {
                 TheatersDto theater = new TheatersDto

@@ -12,7 +12,6 @@ namespace BookMyShowWebApplicationModal
         public string? ToEmail { get; set; }
         public string? subject {  get; set; }
         public string? body { get; set; }
-       // public maildto? maildto { get; set; }  
     }
     public class maildto
     {

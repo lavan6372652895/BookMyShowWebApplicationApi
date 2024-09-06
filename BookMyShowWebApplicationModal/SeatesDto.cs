@@ -10,7 +10,7 @@ namespace BookMyShowWebApplicationModal
     {
         public int SeatID { get; set; }
         public int ShowtimeID {  get; set; }
-        public string SeatNumber {  get; set; }
+        public string? SeatNumber {  get; set; }
         public Boolean IsBooked {  get; set; }
         public int levels { get; set; }
         public int ScreenId {  get; set; } 

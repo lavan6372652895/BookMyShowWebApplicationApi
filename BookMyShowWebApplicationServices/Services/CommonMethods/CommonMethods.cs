@@ -15,7 +15,7 @@ namespace BookMyShowWebApplicationServices.Services.CommonMethods
         {
             if (!string.IsNullOrEmpty(jwtToken))
             {
-                // Remove "Bearer " prefix if present
+              
                 jwtToken = Regex.Replace(jwtToken, "^Bearer\\s+", "", RegexOptions.IgnoreCase);
 
                 var handler = new JwtSecurityTokenHandler();
