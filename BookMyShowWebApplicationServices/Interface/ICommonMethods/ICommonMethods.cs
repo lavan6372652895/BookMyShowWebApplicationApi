@@ -9,7 +9,7 @@ namespace BookMyShowWebApplicationServices.Interface.ICommonMethods
 {
     public interface ICommonMethods
     {
-        object GetUserTokenData(string jwtToken);
+        UserDto GetUserTokenData(string jwtToken);
        
     }
 }
