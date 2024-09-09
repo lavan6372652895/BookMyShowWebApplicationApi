@@ -9,8 +9,8 @@ using Microsoft.Data.SqlClient;
 namespace BookMyShowWebApplicationDataAccess
 {
     
-        public class BaseRepository
-        {
+        public class BaseRepository: IBaseRepository
+    {
             public readonly IOptions<DataConfig> _ConnectionString;
             public readonly IConfiguration configuration;
             private SqlConnection Conn;

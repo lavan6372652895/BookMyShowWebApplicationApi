@@ -25,8 +25,9 @@ namespace BookMyShowWebApplication
 
           
             services.AddSignalR();
-          // services.AddSingleton<IMessageHubClient, MessageHub>();
+            // services.AddSingleton<IMessageHubClient, MessageHub>();
             //services.AddHostedService<BackgroundServices>();
+            services.AddMediatR(cfg => cfg.RegisterServicesFromAssemblies(AppDomain.CurrentDomain.GetAssemblies()));
             services.AddMvc().AddSessionStateTempDataProvider();
             services.AddSession();
             services.AddMvc();

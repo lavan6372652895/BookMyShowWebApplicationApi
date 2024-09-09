@@ -543,3 +543,52 @@ BEGIN
 END
 
 exec Sp_paginationdata 3,6
+
+
+alter proc Sp_AddorUpdateRewview(
+@id int,
+@review varchar(250),
+@rating decimal(10,3),
+@movieName int,
+@userid int
+)
+as
+begin
+if(@id=0 or @id=null)
+begin
+declare @Reviewid int
+insert into Reviews(Review,Rating,movieName,Userid)
+values(@review,@rating,@movieName,@userid)
+set @Reviewid=SCOPE_IDENTITY()
+select *
+from Reviews
+where Id=@Reviewid
+end
+else
+begin
+update Reviews
+set Review=@review,Rating=@rating
+where Id=@id and Userid=@userid
+select *
+from Reviews
+where Id=@id
+end
+end
+
+create proc Sp_GetAllReviews
+as
+begin
+select * 
+from Reviews
+end
+
+create proc Sp_GetReviewByMovieid
+(
+@movieid int
+)
+as
+begin
+select *
+from Reviews
+where movieName=@movieid
+end

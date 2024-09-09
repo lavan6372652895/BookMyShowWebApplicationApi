@@ -26,12 +26,14 @@ namespace BookMyShowWebApplicationDataAccess
         {
             var dictionary = new Dictionary<Type, Type>()
             {
+                  {typeof(IBaseRepository),typeof(BaseRepository) },
              { typeof(IHome), typeof(HomeClass) },
              {typeof(IAdmin),typeof(Admins) },
              {typeof(ICommon),typeof(Common) },
              {typeof(IuserRepo),typeof(UserRepo) },
              {typeof(Itheatersrepo),typeof(Theatersrepo) },
              {typeof(Iemail),typeof(Email) },
+           
             };
             return dictionary;
         }

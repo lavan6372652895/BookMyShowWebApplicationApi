@@ -45,5 +45,11 @@ namespace BookMyShowWebApplicationCommon.Helper
         {
             public const string AddOtp = "Sp_AddOtp";
         }
+        public class Movies
+        {
+            public const string getAllReviews = "Sp_GetAllReviews";
+            public const string GetReviewByMovieid = "Sp_GetReviewByMovieid";
+            public const string AddorUpdateRewview = "Sp_AddorUpdateRewview";
+        }
     }
 }
