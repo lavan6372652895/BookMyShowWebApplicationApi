@@ -1,5 +1,6 @@
 ﻿using BookMyShowWebApplicationDataAccess.InterFaces.Theaters;
 using BookMyShowWebApplicationModal;
+using BookMyShowWebApplicationModal.Users;
 using BookMyShowWebApplicationServices.Interface.Theater;
 using System;
 using System.Collections.Generic;
@@ -12,7 +13,7 @@ namespace BookMyShowWebApplicationServices.Services.Theater
 {
     public class TheaterManage : ITheaterManage
     {
-        public Itheatersrepo _theatersrepo;
+        private readonly Itheatersrepo _theatersrepo;
         public TheaterManage(Itheatersrepo theatersrepo) { 
 
             _theatersrepo = theatersrepo;
@@ -39,6 +40,12 @@ namespace BookMyShowWebApplicationServices.Services.Theater
         public async Task<List<TheatersDto>> GetTheaterWithScreens()
         {
            var data = await _theatersrepo.GetTheaterWithScreens();
+            return data;
+        }
+
+        public async Task<List<ListofMovieTheaterscs>> moviesListOfTheaterList(int movieid, int cityid)
+        {
+           var data= await _theatersrepo.moviesListOfTheaterList(movieid, cityid);
             return data;
         }
     }

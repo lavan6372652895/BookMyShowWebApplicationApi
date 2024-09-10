@@ -87,7 +87,6 @@ builder.Services.AddAuthorization(options =>
     {
         policy.RequireRole("Admin");
     });
-
     options.AddPolicy("userOnly", policy =>
     {
         policy.RequireRole("user");
@@ -96,9 +95,7 @@ builder.Services.AddAuthorization(options =>
     {
         policy.RequireRole("Theaters");
     });
-
-    // Define a default policy that requires authentication
-    options.FallbackPolicy = new AuthorizationPolicyBuilder()
+      options.FallbackPolicy = new AuthorizationPolicyBuilder()
         .RequireAuthenticatedUser()
         .Build();
 });

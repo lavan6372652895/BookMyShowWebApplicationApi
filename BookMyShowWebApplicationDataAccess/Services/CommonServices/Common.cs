@@ -18,9 +18,9 @@ namespace BookMyShowWebApplicationDataAccess.Services.CommonServices
 {
     public class Common : BaseRepository,ICommon
     {
-        public IConfiguration configuration;
+        private readonly IConfiguration configuration;
        
-        public Common(IOptions<DataConfig> connectionString, IConfiguration config = null) : base(connectionString, config)
+        public Common(IOptions<DataConfig> connectionString, IConfiguration? config = null) : base(connectionString, config)
         {
             configuration = config;
             

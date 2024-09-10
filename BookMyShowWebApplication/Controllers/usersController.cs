@@ -16,46 +16,16 @@ namespace BookMyShowWebApplication.Controllers
     [Authorize(Roles = "user")]
     public class UsersController : ControllerBase
     {
-        public IConfiguration _config;
-        public IUserServices _serivices;
-        private readonly IHubContext<MessageHub> _hubContext;
-        public UsersController(IConfiguration config, IUserServices serivices, IHubContext<MessageHub> hubContext)
+        
+        private readonly IUserServices _serivices;
+        private  IHubContext<MessageHub> _hubContext;
+        public UsersController( IUserServices serivices, IHubContext<MessageHub> hubContext)
         {
-            _config = config;
             _serivices = serivices;
             _hubContext = hubContext;
         }
 
-        [HttpGet]
-        [AllowAnonymous]
-        public Task<List<MoviesDto>> GetListofMovies() {
-
-            var data = _serivices.MoviesList();
-            if (data.Result.Count > 0)
-            {
-                return Task.FromResult(data.Result);
-            }
-            else
-            {
-                return data;
-            }
-        }
-        [HttpGet]
-        public Task<List<ListofMovieTheaterscs>> TheaterList(int movieid, int cityid)
-        {
-            //string token = HttpContext.Request.Headers.Authorization;
-            //string? nameIdentifier = _customUserIdProvider.GetUserId(HttpContext.Connection);
-
-            var data = _serivices.moviesListOfTheaterList(movieid, cityid);
-            if (data.Result.Count > 0)
-            {
-                return Task.FromResult(data.Result);
-            }
-            else
-            {
-                return data;
-            }
-        }
+        
         [HttpGet]
         [Authorize(Roles = "Admin,user")]
         public Task<List<SeatesDto>> GetListofSeates(int Showid)
@@ -71,9 +41,9 @@ namespace BookMyShowWebApplication.Controllers
         [HttpPost]
         public  async Task<string> AddBooking(Bookingsdto[] booking)
         {
-            var data = _serivices.Addseat(booking);
+            var data =await _serivices.Addseat(booking);
           // await _hubContext.Clients.All.UpdateSeatAvailability();
-            return data.Result;
+            return data;
         }
     }
 }

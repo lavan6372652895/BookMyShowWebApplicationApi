@@ -9,8 +9,8 @@ using System.Text;
 using Microsoft.AspNetCore.Authorization;
 using BookMyShowWebApplicationCommon.Helper;
 using OpenAI_API;
-
 using OpenAI_API.Chat;
+using BookMyShowWebApplicationServices.Interface.ICommonMethods;
 namespace BookMyShowWebApplication.Controllers
 {
     [Route("BookMyShow/[controller]/[Action]")]
@@ -18,17 +18,15 @@ namespace BookMyShowWebApplication.Controllers
     [AllowAnonymous]
     public class HomeController : ControllerBase
     {
-        public IConfiguration _config;
-        public IHomenterface _serivices;
-        private readonly IHttpContextAccessor _httpContextAccessor;
-        private readonly ILogger<HomeController> _logger;
-       
-        public HomeController(IConfiguration config, IHomenterface serivices, IHttpContextAccessor httpContextAccessor, ILogger<HomeController> logger)
+        private readonly IHomenterface _serivices;
+        private  ILogger<HomeController> _logger;
+        private readonly ICommonMethods _commonMethods;
+        public HomeController(IHomenterface serivices,ILogger<HomeController> logger,ICommonMethods commonmethods)
         {
-            _config = config;
+          
             _serivices = serivices;
-            _httpContextAccessor = httpContextAccessor;
             _logger = logger;
+            _commonMethods = commonmethods;
           
         }
         [HttpGet]
@@ -99,7 +97,7 @@ namespace BookMyShowWebApplication.Controllers
                 {
                     // Generate JWT token if authentication is successful
                     var userdeatils = await _serivices.SingleUser(logindto.email ?? string.Empty);
-                    var token = GenerateJSONWebToken(userdeatils, result);
+                    var token = _commonMethods.GenerateJSONWebToken(userdeatils, result);
 
                    
                      jwtTokenModal = new JwtTokenmodal
@@ -119,7 +117,7 @@ namespace BookMyShowWebApplication.Controllers
                     };
 
                     HttpContext.Response.Cookies.Append("accessToken", token, cookieOptions);
-                    var result1=   await _serivices.AddToken(jwtTokenModal, logindto.email ?? string.Empty).ConfigureAwait(false);
+                     await _serivices.AddToken(jwtTokenModal, logindto.email ?? string.Empty).ConfigureAwait(false);
                    
 
                     response.Data = jwtTokenModal;
@@ -137,55 +135,6 @@ namespace BookMyShowWebApplication.Controllers
 
             return response;
         }
-        
-        private string GenerateJSONWebToken(UserDto userInfo, string role)
-        {
-            if (userInfo == null)
-                throw new ArgumentNullException(nameof(userInfo), "User information must not be null.");
-
-            var key = _config["Jwt:Key"];
-            if (string.IsNullOrEmpty(key))
-                throw new InvalidOperationException("JWT Key is not configured.");
-
-            var issuer = _config["Jwt:Issuer"];
-            var securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(key));
-            var credentials = new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha256);
-            // Ensure the properties of userInfo are not null
-            var userName = userInfo.UserName ?? string.Empty;
-            var userId = userInfo.userid.ToString();
-            var userRole = userInfo.Roles ?? string.Empty;
-            var phoneNumber = userInfo.phonenumber ?? string.Empty;
-            var fullName = userInfo.FullName ?? string.Empty;
-            var expiration = DateTime.UtcNow.AddMinutes(45); 
-            var tokenDescriptor = new SecurityTokenDescriptor
-            {
-                Subject = new ClaimsIdentity(new[]
-                {
-            new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()), // Unique identifier
-            new Claim(ClaimTypes.Role, role), // User role
-            new Claim(ClaimTypes.NameIdentifier, userName), // User identifier
-            new Claim(JwtRegisteredClaimNames.Iat, DateTimeOffset.UtcNow.ToUnixTimeSeconds().ToString(), ClaimValueTypes.Integer64), // Issued at
-            new Claim("_useridId", userId), // Custom claims
-            new Claim("_Role", userRole),
-            new Claim("phonenumber", phoneNumber),
-            new Claim("FullName", fullName),
-            new Claim("UserName", userName),
-           
-             }),
-                Expires = expiration,
-                Issuer = issuer, // Issuer
-                SigningCredentials = credentials
-            };
-
-            var tokenHandler = new JwtSecurityTokenHandler();
-
-            var token = tokenHandler.CreateToken(tokenDescriptor);
-
-            return tokenHandler.WriteToken(token);
-        }
-
-
-
         [HttpGet]
         [Authorize(Roles = "user")]
         public async Task<List<Citydto>> GetCitys()
@@ -245,14 +194,22 @@ namespace BookMyShowWebApplication.Controllers
             return response;
         }
         [HttpGet]
-        [AllowAnonymous]
+        [Authorize]
         public IActionResult Logout()
         {
-            // Delete the authentication cookie
-            HttpContext.Response.Cookies.Delete("accessToken");
+            try
+            {  // Delete the authentication cookie
+                HttpContext.Response.Cookies.Delete("accessToken");
 
-            // Return a success response
-            return Ok(new { success = true });
+                // Return a success response
+                return Ok(new { success = true });
+            }
+            catch {
+                return BadRequest(new { success = false });
+            
+            }
+          
+        
         }
               
         [AllowAnonymous]
@@ -263,13 +220,13 @@ namespace BookMyShowWebApplication.Controllers
             {
                 return BadRequest("Input value cannot be empty.");
             }
-            string apikey = "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";
+            string apikey = "sk-npbDCeifwDJPIuvmFSWT5hgK1UJ9PwOGBcQguIEfz3T3BlbkFJeFtXZUmlfcU9uz6CNJN0BxvgtyLODosDizenIeLjgA";
             OpenAIAPI _openai = new OpenAIAPI(apikey);
            try
         {
             var chatRequest = new OpenAI_API.Chat.ChatRequest
             {
-                Model = "gpt-3.5-turbo",
+                Model = "gpt-3.5-turbo-1106",
                 Messages = new[] { new OpenAI_API.Chat.ChatMessage { TextContent = inputvalue } }
             };
 
@@ -277,7 +234,7 @@ namespace BookMyShowWebApplication.Controllers
 
             if (response != null && response.Choices.Count > 0)
             {
-                var result = response.Choices[0].Message.Content;
+                var result = response.Choices[0].Message;
                 return Ok(result);
             }
 

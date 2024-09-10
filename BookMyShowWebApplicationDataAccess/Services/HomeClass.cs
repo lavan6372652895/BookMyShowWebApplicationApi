@@ -16,7 +16,7 @@ namespace BookMyShowWebApplicationDataAccess.Services
     {
         private readonly IConfiguration configuration;
 
-        public HomeClass(IOptions<DataConfig> connectionString, IConfiguration config = null) : base(connectionString, config)
+        public HomeClass(IOptions<DataConfig> connectionString, IConfiguration? config = null) : base(connectionString, config)
         {
             configuration = config;
         }

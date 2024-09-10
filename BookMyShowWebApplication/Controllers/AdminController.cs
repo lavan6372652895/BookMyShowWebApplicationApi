@@ -15,12 +15,12 @@ namespace BookMyShowWebApplication.Controllers
 
     public class AdminController : ControllerBase
     {
-        private IConfiguration _config;
-        private IAdminServices _Services;
-        private ICommonMethods _CommonMethods;
-        public AdminController(IConfiguration config, IAdminServices service, ICommonMethods commonMethods)
+   
+        private readonly IAdminServices _Services;
+        private readonly ICommonMethods _CommonMethods;
+        public AdminController(IAdminServices service, ICommonMethods commonMethods)
         {
-            _config = config;
+            
             _Services = service;
             _CommonMethods = commonMethods;
         }

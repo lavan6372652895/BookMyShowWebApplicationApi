@@ -29,15 +29,6 @@ namespace BookMyShowWebApplicationServices.Services.Users
            var data =_service.MoviesList();
             return data;
         }
-
-       
-
-       public Task<List<ListofMovieTheaterscs>> moviesListOfTheaterList(int movieid, int cityid)
-        {
-           var data =_service.moviesListOfTheaterList(movieid, cityid);
-            return data;
-        }
-
         public Task<List<SeatesDto>> seatesList(int Showid)
         {
            var data =_service.seatesList(Showid);

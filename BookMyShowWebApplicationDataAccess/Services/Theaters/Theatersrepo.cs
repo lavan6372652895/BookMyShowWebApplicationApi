@@ -2,6 +2,7 @@
 using BookMyShowWebApplicationDataAccess.InterFaces.Theaters;
 using BookMyShowWebApplicationModal;
 using BookMyShowWebApplicationModal.config;
+using BookMyShowWebApplicationModal.Users;
 using Dapper;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Options;
@@ -18,8 +19,8 @@ namespace BookMyShowWebApplicationDataAccess.Services.Theaters
 {
     public class Theatersrepo : BaseRepository,Itheatersrepo
     {
-        public IConfiguration configuration;
-        public Theatersrepo(IOptions<DataConfig> connectionString, IConfiguration config = null) : base(connectionString, config)
+        private readonly IConfiguration  configuration;
+        public Theatersrepo(IOptions<DataConfig> connectionString, IConfiguration? config = null) : base(connectionString, config)
         {
             configuration = config;
         }
@@ -85,6 +86,13 @@ namespace BookMyShowWebApplicationDataAccess.Services.Theaters
             return theaterList;
         }
 
-
+        public async Task<List<ListofMovieTheaterscs>> moviesListOfTheaterList(int movieid, int cityid)
+        {
+            var parametar = new DynamicParameters();
+            parametar.Add("@movieid", movieid);
+            parametar.Add("@cityid", cityid);
+            var data = await QueryAsync<ListofMovieTheaterscs>(Storeprocedure.Users.Theaterlist, parametar, commandType: CommandType.StoredProcedure).ConfigureAwait(false);
+            return data.ToList();
+        }
     }
 }

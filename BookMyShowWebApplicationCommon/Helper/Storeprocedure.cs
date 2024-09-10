@@ -8,13 +8,13 @@ namespace BookMyShowWebApplicationCommon.Helper
 {
     public static class Storeprocedure
     {
-        public class Admin
+        public static class Admin
         {
             public const string NewMovieReg = "AddNewMovies";
             public const string ListofGenre = "Sp_listofGenre";
             public const string AddNewActor = "sp_AddNewActor";
         }
-       public class Common
+        public static class Common
         {
             public const string ListofRoles = "Sp_listofRoles";
             public const string ListofActors = "Sp_ListOfActors";
@@ -26,14 +26,14 @@ namespace BookMyShowWebApplicationCommon.Helper
             public const string Singleuserdata = "Sp_getsingleuserdata";
             public const string Sp_paginationdata = "paginationdata";
         }
-        public class Users
+        public static class Users
         {
             public const string ListOfMovies = "Sp_Listofmovies";
             public const string Theaterlist = "sp_Movie_Theaterlist";
             public const string ListofSeats = "Sp_ListofmovieSeates";
             public const string TicketBooking = "Sp_addBookings";
         }
-        public class Theatersowner
+        public static class Theatersowner
         {
             public const string AddtheTheaters = "Sp_AddNewTheaters";
             public const string AddNewScreen = "Sp_AddNewScreen";
@@ -41,11 +41,11 @@ namespace BookMyShowWebApplicationCommon.Helper
             public const string AddShowTimeing = "Sp_AddShowtimeing";
         }
 
-        public class Email
+        public static class Email
         {
             public const string AddOtp = "Sp_AddOtp";
         }
-        public class Movies
+        public static class Movies
         {
             public const string getAllReviews = "Sp_GetAllReviews";
             public const string GetReviewByMovieid = "Sp_GetReviewByMovieid";

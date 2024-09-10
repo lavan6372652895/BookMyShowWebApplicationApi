@@ -18,8 +18,8 @@ namespace BookMyShowWebApplicationDataAccess.Services.Email
 {
     public class Email :BaseRepository, Iemail
     {
-        public IConfiguration configuration;
-        public Email(IOptions<DataConfig> connectionString, IConfiguration config = null) : base(connectionString, config)
+        private readonly IConfiguration configuration;
+        public Email(IOptions<DataConfig> connectionString, IConfiguration? config = null) : base(connectionString, config)
         {
             configuration = config;
         }

@@ -12,7 +12,7 @@ namespace BookMyShowWebApplicationServices.Services.Admin
 {
     public class AdminServices: IAdminServices
     {
-        public IAdmin _Services;
+        private readonly IAdmin _Services;
         public AdminServices(IAdmin Services)
         {
             _Services = Services;

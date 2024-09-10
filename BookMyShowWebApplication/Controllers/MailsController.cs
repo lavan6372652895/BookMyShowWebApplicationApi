@@ -12,7 +12,7 @@ namespace BookMyShowWebApplication.Controllers
     [AllowAnonymous]
     public class MailsController : ControllerBase
     {
-        public Imail _mail;
+        private readonly Imail _mail;
         public MailsController(Imail mail) { 
         _mail = mail;
         }
@@ -21,11 +21,15 @@ namespace BookMyShowWebApplication.Controllers
        public async Task<IActionResult> SendOtp(string email)
         {
             var data = await _mail.sendOtp(email);
-            if (data==true) {
+            if (data) {
 
                 return Ok(data);
             }
-            return BadRequest();
+            else
+            {
+                return BadRequest();
+            }
+            
 
            
         }

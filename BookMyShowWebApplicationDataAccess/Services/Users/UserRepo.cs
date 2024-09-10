@@ -19,8 +19,8 @@ namespace BookMyShowWebApplicationDataAccess.Services.Users
 {
     public class UserRepo : BaseRepository,IuserRepo
     {
-        public IConfiguration configuration;
-        public UserRepo(IOptions<DataConfig> connectionString, IConfiguration config = null) : base(connectionString, config)
+        private readonly IConfiguration configuration;
+        public UserRepo(IOptions<DataConfig> connectionString, IConfiguration? config = null) : base(connectionString, config)
         {
             configuration = config;
         }
@@ -47,14 +47,7 @@ namespace BookMyShowWebApplicationDataAccess.Services.Users
             return data.ToList();   
         }
 
-        public async Task<List<ListofMovieTheaterscs>> moviesListOfTheaterList(int movieid, int cityid)
-        {
-            var parametar = new DynamicParameters();
-            parametar.Add("@movieid",movieid);
-            parametar.Add("@cityid", cityid);
-            var data = await QueryAsync<ListofMovieTheaterscs>(Storeprocedure.Users.Theaterlist,parametar,commandType:CommandType.StoredProcedure).ConfigureAwait(false);
-            return data.ToList();
-        }
+        
 
         public async Task<List<SeatesDto>> seatesList(int Showid)
         {

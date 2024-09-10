@@ -15,8 +15,8 @@ namespace BookMyShowWebApplicationServices.Services.Home
 {
     public class HomeServices : IHomenterface
     {
-        public IHome _service;
-        public ICommon _common;
+        private readonly IHome _service;
+        private readonly ICommon _common;
         public HomeServices(IHome service, ICommon common)
         {
             _service = service;
