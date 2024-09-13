@@ -32,6 +32,7 @@ namespace BookMyShowWebApplicationCommon.Helper
             public const string Theaterlist = "sp_Movie_Theaterlist";
             public const string ListofSeats = "Sp_ListofmovieSeates";
             public const string TicketBooking = "Sp_addBookings";
+            public const string GetTicket = "Sp_GetTicket";
         }
         public static class Theatersowner
         {

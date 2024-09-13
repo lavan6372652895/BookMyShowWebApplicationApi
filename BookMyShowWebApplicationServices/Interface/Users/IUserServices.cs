@@ -14,6 +14,6 @@ namespace BookMyShowWebApplicationServices.Interface.Users
         Task<List<MoviesDto>> MoviesList();
        
         Task<List<SeatesDto>> seatesList(int Showid);
-        Task<string> Addseat(Bookingsdto[] booking);
+        Task<Bookingsdto> Addseat(Bookingsdto[] booking);
     }
 }

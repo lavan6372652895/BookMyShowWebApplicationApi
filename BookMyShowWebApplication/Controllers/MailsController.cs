@@ -18,9 +18,9 @@ namespace BookMyShowWebApplication.Controllers
         }
 
         [HttpPost]
-       public async Task<IActionResult> SendOtp(string email)
+        public async Task<IActionResult> SendOtp(string email)
         {
-            var data = await _mail.sendOtp(email);
+            var data = await _mail.sendEmail(email);
             if (data) {
 
                 return Ok(data);
@@ -29,9 +29,6 @@ namespace BookMyShowWebApplication.Controllers
             {
                 return BadRequest();
             }
-            
-
-           
         }
     }
 }

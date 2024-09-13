@@ -33,7 +33,6 @@ BEGIN
     RETURN @setle
 END
 
-
 ALTER PROCEDURE [dbo].[AddNewMovies](
     @movieid INT,
     @moviename VARCHAR(250),
@@ -43,14 +42,15 @@ ALTER PROCEDURE [dbo].[AddNewMovies](
     @ReleaseDate DATE,
    -- @Rating DECIMAL(3,1),
     @Duration INT,
-    @languages INT
+    @languages INT,
+	@movieTeaser nvarchar(max)
 )
 AS
 BEGIN
     IF (@movieid = 0 OR @movieid IS NULL)
     BEGIN
-        INSERT INTO Movie (moviename, Genre, posterpic, Moviecast, ReleaseDate, Duration, languages)
-        VALUES (@moviename, @Genre, @posterpic, @Moviecast, @ReleaseDate, @Duration, @languages);
+        INSERT INTO Movie (moviename, Genre, posterpic, Moviecast, ReleaseDate, Duration, languages,Teaser)
+        VALUES (@moviename, @Genre, @posterpic, @Moviecast, @ReleaseDate, @Duration, @languages,@movieTeaser);
 
         DECLARE @id INT;
         SET @id = SCOPE_IDENTITY();
@@ -68,7 +68,8 @@ BEGIN
             ReleaseDate = @ReleaseDate,
             --Rating = @Rating,
             Duration = @Duration,
-            languages = @languages
+            languages = @languages,
+		Teaser=@movieTeaser
         WHERE movieid = @movieid;
 
         SELECT * FROM Movie WHERE movieid = @movieid;
@@ -196,12 +197,15 @@ select * from City
 order by CityName
 end
 
-CREATE proc Sp_GetTicket(  
-@bookingid int  
+
+alter proc Sp_GetTicket(  
+@bookingid int,
+@userid int 
 )  
 as  
 begin  
-select Bk.BookingID,mv.moviename,mv.languages,sh.ShowDate,sh.ShowTime,bk.numberofseats,th.Name,sn.Code,  
+select Bk.BookingID,Bk.Totalamount,mv.moviename,mv.posterpic,lg.Languagename,sh.ShowDate,
+sh.ShowTime,bk.numberofseats,th.Name,sn.Code,
 dbo.Seatesperlevel(@bookingid) as SeatNumbers,Bk.BookingDateTime  
 from Bookings as Bk  
 inner join Showtimes as sh   
@@ -211,8 +215,10 @@ on sn.ID=sh.ScreenId
 inner join Theaters as th   
 on th.TheaterID=sn.TheatreID  
 inner join Movie as mv  
-on mv.movieid=sh.MovieID  
-where Bk.BookingID=@bookingid  
+on mv.movieid=sh.MovieID
+inner join Languages as lg
+on mv.languages=lg.ID
+where Bk.BookingID=@bookingid and Bk.UserID=@userid
 end
 
 CREATE proc Sp_ListOfActors  

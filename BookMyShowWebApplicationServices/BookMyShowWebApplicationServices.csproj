@@ -10,6 +10,8 @@
     <PackageReference Include="BingMapsRESTToolkit" Version="1.1.4" />
     <PackageReference Include="Google.Apis.Cloudchannel.v1" Version="1.68.0.3496" />
     <PackageReference Include="Microsoft.Extensions.Configuration.Binder" Version="8.0.2" />
+    <PackageReference Include="NReco.PdfGenerator" Version="1.2.1" />
+    <PackageReference Include="Syncfusion.Pdf.Net.Core" Version="26.2.14" />
   </ItemGroup>
 
   <ItemGroup>

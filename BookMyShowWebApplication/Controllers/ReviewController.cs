@@ -13,17 +13,16 @@ namespace BookMyShowWebApplication.Controllers
     public class ReviewController : ControllerBase
     {
         private readonly IMediator _mediator;
-        private readonly ICommonMethods _commonmethod;
-        public ReviewController(IMediator mediator,ICommonMethods commonmethod)
+     
+        public ReviewController(IMediator mediator)
         {
             _mediator = mediator;
-            _commonmethod = commonmethod;
+           
         }
         [HttpGet]
         public async Task<List<ReviewsDto>> GetAllReviews()
         {
-            string jwt = HttpContext.Request.Headers.Authorization.ToString();
-            UserDto user = _commonmethod.GetUserTokenData(jwt);
+           
             var query = new GetAllReviews();
             var result = await _mediator.Send(query);
             return result;

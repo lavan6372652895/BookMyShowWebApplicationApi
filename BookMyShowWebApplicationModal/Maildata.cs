@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.Mail;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -12,6 +13,7 @@ namespace BookMyShowWebApplicationModal
         public string? ToEmail { get; set; }
         public string? subject {  get; set; }
         public string? body { get; set; }
+        public Attachment Pdf {  get; set; }
     }
     public class maildto
     {

@@ -21,6 +21,7 @@
     <ProjectReference Include="..\BookMyShowWebApplicationDataAccess\BookMyShowWebApplicationDataAccess.csproj" />
     <ProjectReference Include="..\BookMyShowWebApplicationModal\BookMyShowWebApplicationModal.csproj" />
     <ProjectReference Include="..\BookMyShowWebApplicationServices\BookMyShowWebApplicationServices.csproj" />
+    <ProjectReference Include="..\GrpcSdk\GrpcSdk.csproj" />
   </ItemGroup>
 
 

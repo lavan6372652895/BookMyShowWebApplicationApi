@@ -25,7 +25,7 @@ namespace BookMyShowWebApplicationDataAccess.Services.Users
             configuration = config;
         }
 
-        public async Task<string> Addseat(Bookingsdto[] booking)
+        public async Task<Bookingsdto> Addseat(Bookingsdto[] booking)
         {
             var parametar = new DynamicParameters();
             parametar.Add("@userid", booking[0].userid);
@@ -37,8 +37,24 @@ namespace BookMyShowWebApplicationDataAccess.Services.Users
             parametar.Add("@ticketAmount",booking[0].TicketAmount);
             parametar.Add("@GstAmount", booking[0].GstAmount);
             parametar.Add("@platformcharges",booking[0].Platformcharges);
-            var data = await QueryFirstOrDefaultAsync<string>(Storeprocedure.Users.TicketBooking, parametar ,commandType: CommandType.StoredProcedure);
-            return data.ToString(); 
+            var data = await QueryFirstOrDefaultAsync<Bookingsdto>(Storeprocedure.Users.TicketBooking, parametar ,commandType: CommandType.StoredProcedure);
+            return data; 
+        }
+
+        public async Task<List<TicketDto>> GetTicket(int booingid,int userid)
+        {
+            try
+            {
+                var parametar = new DynamicParameters();
+                parametar.Add("@bookingid", booingid);
+                parametar.Add("@userid", userid);
+                var data = await QueryAsync<TicketDto>(Storeprocedure.Users.GetTicket,parametar,commandType: CommandType.StoredProcedure).ConfigureAwait(false);
+                return data.ToList();
+            }
+            catch (Exception ex) { 
+            return new List<TicketDto>();
+            }
+
         }
 
         public async Task<List<MoviesDto>> MoviesList()

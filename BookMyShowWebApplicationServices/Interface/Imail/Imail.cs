@@ -8,6 +8,6 @@ namespace BookMyShowWebApplicationServices.Interface.Imail
 {
     public interface Imail
     {
-        Task<bool> sendOtp(string email);
+        Task<bool> sendEmail(string email,int bookingid=0);
     }
 }
