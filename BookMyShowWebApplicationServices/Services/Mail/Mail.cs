@@ -13,6 +13,7 @@ using NReco.PdfGenerator;
 using BookMyShowWebApplicationModal.Users;
 using static System.Net.Mime.MediaTypeNames;
 using System.Drawing;
+using System.Net.Http.Headers;
 namespace BookMyShowWebApplicationServices.Services.Mail
 {
     public class Mail : Imail
@@ -291,6 +292,15 @@ namespace BookMyShowWebApplicationServices.Services.Mail
             {
                 throw new InvalidOperationException("Generated PDF stream does not support reading.");
             }
+            var result = new HttpResponseMessage(HttpStatusCode.OK)
+            {
+                Content = new ByteArrayContent(memoryStream.ToArray())
+            };
+            result.Content.Headers.ContentType = new MediaTypeHeaderValue("application/pdf");
+            result.Content.Headers.ContentDisposition = new ContentDispositionHeaderValue("attachment")
+            {
+                FileName = $"{TicketDetails[0].Moviename}.pdf"
+            };
 
             // Return the attachment
             return new Attachment(memoryStream, $"{TicketDetails[0].Moviename}.pdf", "application/pdf");

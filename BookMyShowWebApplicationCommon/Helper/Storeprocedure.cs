@@ -52,5 +52,11 @@ namespace BookMyShowWebApplicationCommon.Helper
             public const string GetReviewByMovieid = "Sp_GetReviewByMovieid";
             public const string AddorUpdateRewview = "Sp_AddorUpdateRewview";
         }
+
+        public static class Eventorganizations
+        {
+            public const string addorUpdateEventOrganizations = "Sp_addorupdateEventorganizations";
+            public const string addOrUpDateEvent = "Sp_addorupdateEvent";
+        }
     }
 }

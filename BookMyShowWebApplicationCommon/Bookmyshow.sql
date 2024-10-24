@@ -361,7 +361,7 @@ BEGIN
     END
 
     -- Insert the activity record into the userActivity table
-    INSERT INTO userActivity (token, userid, windowidentity)
+    INSERT INTO userActivity(token, userid, windowidentity)
     VALUES (@token, @userid, @windowidentity);
 
     -- Return the inserted record
@@ -598,3 +598,105 @@ select *
 from Reviews
 where movieName=@movieid
 end
+
+
+alter proc Sp_addorupdateEventorganizations(
+@ID int,
+@organizationname varchar(250),
+@orglogo nvarchar(max),
+@email varchar(250),
+@Password nvarchar(max),
+@orgAddress nvarchar(max),
+@organizationdescription nvarchar(max)
+)
+as
+begin
+If(@ID=0 or @ID=null)
+begin
+insert into Eventorganizations(organizationname,orglogo,Email,Password,orgAddress,organizationdescription)
+values(@organizationname,@orglogo,@email,@Password,@orgAddress,@organizationdescription)
+set @ID =SCOPE_IDENTITY()
+select * 
+from Eventorganizations
+where ID=@ID
+end
+else
+begin
+update Eventorganizations
+set organizationname=@organizationname,
+orglogo=@orglogo,
+Email=@email,
+Password=@Password,
+orgAddress=@orgAddress,
+organizationdescription=@organizationdescription
+select * 
+from Eventorganizations
+where ID=@ID
+end
+end
+
+alter proc Sp_addorupdateEvent(
+@Eventid int,
+@Eventtype varchar(250),
+@Startdate date,
+@Enddtae date,
+@duration int,
+@EventAddress nvarchar(max),
+@Eventcontact nvarchar(max),
+@Eventdesc nvarchar(max),
+@Orgid int,
+@BookingsStartdate datetime ,
+@Eventposter nvarchar(max)
+)
+as
+begin
+If(@Eventid=0 or @Eventid=null)
+begin
+insert into Eventstable(Eventtype,Startdate,Enddtae,duration,EventAddress,Eventcontact,Eventdesc,Orgid,BookingsStartdate,Eventposter)
+values(@Eventtype,@Startdate,@Enddtae,@duration,@EventAddress,@Eventcontact,@Eventdesc,@Orgid,@BookingsStartdate,@Eventposter)
+set @Eventid =SCOPE_IDENTITY()
+end
+else
+begin
+update Eventstable 
+set Eventtype=@Eventtype,
+Startdate=@Startdate,
+Enddtae=@Enddtae,
+duration=@duration,
+EventAddress=@EventAddress,
+Eventcontact=@Eventcontact,
+Eventdesc=@Eventdesc,
+Orgid=@Orgid,
+BookingsStartdate=@BookingsStartdate,
+Eventposter=@Eventposter
+where Eventid=@Eventid and Orgid =@Orgid
+end
+end
+
+
+--create proc Sp_GetEventsbyoranaization(
+--@Orgid int
+--)
+--as
+--begin
+--select *
+--from Eventstable
+
+Alter table Eventstable
+add Eventposter Nvarchar(max)
+
+
+create table EventTicketCategory(
+CategoryId int primary key identity(500,1),
+Categorytype varchar(250)
+)
+insert into EventTicketCategory(Categorytype)
+values('General'),('VIP or luxury'),('Early bird tickets'),('Group package tickets'),('Giveaways')
+
+
+
+
+
+
+
+

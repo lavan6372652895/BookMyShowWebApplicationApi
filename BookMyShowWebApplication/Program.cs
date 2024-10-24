@@ -6,7 +6,7 @@ using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using System.Text;
 using Microsoft.AspNetCore.Authorization;
-
+using GrpcSdk;
 var builder = WebApplication.CreateBuilder(args);
 builder.Services.Configure<DataConfig>(builder.Configuration.GetSection("ConnectionString"));
 
@@ -14,6 +14,7 @@ builder.Services.Configure<DataConfig>(builder.Configuration.GetSection("Connect
 builder.Services.AddControllers();
 builder.Services.AddHttpClient();
 builder.Services.AddSignalR();
+builder.Services.AddServiceGrpc();
 RegisterServices.RegisterService(builder.Services);
 
 // Configure Swagger/OpenAPI
@@ -100,9 +101,8 @@ builder.Services.AddAuthorization(options =>
         .Build();
 });
 
- var app = builder.Build();
+var app = builder.Build();
 app.UseDefaultFiles();
-app.UseStaticFiles();
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
@@ -111,6 +111,8 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
+app.UseStaticFiles();
+app.UseRouting();
 app.UseCors(policy =>
     policy
         .WithOrigins("http://localhost:4200") // Specify the exact origin
@@ -120,7 +122,7 @@ app.UseCors(policy =>
 );
 
 // Order of middleware matters
-app.UseRouting();
+
 app.UseAuthentication();  // Add this line to ensure authentication is applied
 app.UseAuthorization();   // Ensure this is placed after UseRouting and UseAuthentication
 //app.UseWebSockets();

@@ -1,4 +1,5 @@
 ﻿using BookMyShowWebApplicationServices.Interface.Admin;
+using BookMyShowWebApplicationServices.Interface.Eventorganization;
 using BookMyShowWebApplicationServices.Interface.ICommonMethods;
 using BookMyShowWebApplicationServices.Interface.IHome;
 using BookMyShowWebApplicationServices.Interface.Imail;
@@ -6,6 +7,7 @@ using BookMyShowWebApplicationServices.Interface.Theater;
 using BookMyShowWebApplicationServices.Interface.Users;
 using BookMyShowWebApplicationServices.Services.Admin;
 using BookMyShowWebApplicationServices.Services.CommonMethods;
+using BookMyShowWebApplicationServices.Services.Eventorganization;
 using BookMyShowWebApplicationServices.Services.Home;
 using BookMyShowWebApplicationServices.Services.Mail;
 using BookMyShowWebApplicationServices.Services.Theater;
@@ -25,6 +27,7 @@ namespace BookMyShowWebApplicationServices
                 {typeof(ITheaterManage) ,typeof(TheaterManage)},
                 {typeof(Imail),typeof(Mail) },
                 {typeof(ICommonMethods),typeof(CommonMethods) },
+                {typeof(IEventorganizationServices),typeof(EventorganizationServices) }
             };
             return dictionary;
         }
