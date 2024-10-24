@@ -13,6 +13,10 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BookMyShowWebApplicationCom
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BookMyShowWebApplicationServices", "BookMyShowWebApplicationServices\BookMyShowWebApplicationServices.csproj", "{7A570F2D-6872-45B8-A9CA-9792A8050F08}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BookMyShowWebApplication.GrpcService", "BookMyShowWebApplication.GrpcService\BookMyShowWebApplication.GrpcService.csproj", "{39E36FAD-0C68-43EA-8EF7-3EB31043D0C1}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GrpcSdk", "GrpcSdk\GrpcSdk.csproj", "{E577D1F6-779B-4ACF-88A9-8BFC7002C158}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -39,6 +43,14 @@ Global
 		{7A570F2D-6872-45B8-A9CA-9792A8050F08}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{7A570F2D-6872-45B8-A9CA-9792A8050F08}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{7A570F2D-6872-45B8-A9CA-9792A8050F08}.Release|Any CPU.Build.0 = Release|Any CPU
+		{39E36FAD-0C68-43EA-8EF7-3EB31043D0C1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{39E36FAD-0C68-43EA-8EF7-3EB31043D0C1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{39E36FAD-0C68-43EA-8EF7-3EB31043D0C1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{39E36FAD-0C68-43EA-8EF7-3EB31043D0C1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E577D1F6-779B-4ACF-88A9-8BFC7002C158}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E577D1F6-779B-4ACF-88A9-8BFC7002C158}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E577D1F6-779B-4ACF-88A9-8BFC7002C158}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E577D1F6-779B-4ACF-88A9-8BFC7002C158}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
